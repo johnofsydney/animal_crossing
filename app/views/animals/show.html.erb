@@ -1,0 +1,23 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @animal %>
+
+    <div id="photos">
+      <% @animal.photos.each do |photo| %>
+        <div class="photo">
+          <%= image_tag(photo.address) %>
+        </div>
+
+      <% end %>
+    </div>
+
+
+
+<div>
+  <%= link_to "Edit this animal", edit_animal_path(@animal) %> |
+  <%= link_to "Back to animals", animals_path %>
+
+  <%= button_to "Destroy this animal", @animal, method: :delete %>
+
+  # TODO: add confirm to destroy
+</div>
