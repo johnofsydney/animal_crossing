@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :breeds
 
     # to delete a single phot belonging to an animal
   delete '/animals/:animal_id/delete_photo/:photo_id' => 'animals#delete_photo'

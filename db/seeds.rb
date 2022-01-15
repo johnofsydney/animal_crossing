@@ -14,6 +14,7 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+Breed.destroy_all
 Photo.destroy_all
 Animal.destroy_all
 
@@ -43,7 +44,6 @@ def address
     'https://placedog.net/605',
     'https://placedog.net/606',
     'https://placedog.net/607',
-
   ].sample
 end
 
@@ -57,11 +57,20 @@ def photos
     .map { Photo.create(address: address) }
 end
 
+%w[Alsatian Pug Staffy Schnauser Cavoodle].each do |breed|
+  Breed.create(breed: breed)
+end
+
+def breeds
+  Breed.all.shuffle.take(random_number)
+end
+
 20.times do
   Animal.create(
     name: name,
     dob: dob,
     size: size,
-    photos: photos
+    photos: photos,
+    breeds: breeds
   )
 end
