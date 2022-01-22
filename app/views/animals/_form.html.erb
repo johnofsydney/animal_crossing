@@ -31,6 +31,28 @@
     <%= form.select :size, ["small", "medium", "large"] %>
   </div>
 
+  <div class="field">
+    <%= form.label :breed_ids %>
+    <%= collection_select(
+      # https://stackoverflow.com/questions/8907867/can-someone-explain-collection-select-to-me-in-clear-simple-terms
+
+      :breeds, # field namespace
+      :ids,# field_name
+      # result of these two params will be: <select name="breeds[ids]">...
+
+      # then you should specify some collection or array of rows.
+      # It can be Author.where(..).order(..) or something like that.
+      # In your example it is:
+      Breed.all,
+
+      :id, # this is name of method that will be called for every row, result will be set as key
+      :breed, # this is name of method that will be called for every row, result will be set as value
+      { :selected => animal.breeds.map(&:id), :include_blank => "Please select on or moe breeds" }, # hash of options
+      { :multiple => true } # html options
+      )%>
+  </div>
+
+
 
   <div class="row">
     <% @animal.photos.each do |photo| %>

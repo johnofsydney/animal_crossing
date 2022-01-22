@@ -3,4 +3,5 @@ class Animal < ApplicationRecord
   has_many :photos, dependent: :destroy
   has_and_belongs_to_many :breeds
   accepts_nested_attributes_for :photos
+  accepts_nested_attributes_for :breeds
 end

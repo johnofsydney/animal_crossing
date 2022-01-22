@@ -36,11 +36,13 @@ class AnimalsController < ApplicationController
 
   # PATCH/PUT /animals/1 or /animals/1.json
   def update
+    animal_name = @animal.name || animal_params[:name] || ""
+
     # TODO: S3 refactors
     # - refactor S3 to library code
     # - constants file for keys etc
     # - bucket name for each stage
-    # - permissions for S34 bucket are too lax
+    # - permissions for S3 bucket are too lax
     # - filename (key) should have date / time information in it.
     s3 = Aws::S3::Client.new(
       region: 'us-east-1',
@@ -53,18 +55,30 @@ class AnimalsController < ApplicationController
     # TODO: - safe params for nested photo attributes
     images = params['animal']['photos'].select(&:present?)
 
-    images.each do |image|
-      file = image.tempfile
-      key = "photo-#{SecureRandom.hex(2)}"
+    if images.present?
+      images.each do |image|
+        file = image.tempfile
+        key = "photo-#{Date.today}-#{animal_name}-#{SecureRandom.hex(2)}"
 
-      s3.put_object(
-        bucket: bucket,
-        key: key,
-        body: file
-      )
+        s3.put_object(
+          bucket: bucket,
+          key: key,
+          body: file
+        )
 
-      photo = Photo.new(address: "http://#{bucket}.s3.us-east-1.amazonaws.com/#{key}")
-      @animal.photos << photo
+        photo = Photo.new(address: "http://#{bucket}.s3.us-east-1.amazonaws.com/#{key}")
+        @animal.photos << photo
+      end
+
+      @animal.save
+    end
+
+    # TODO: - safe params for nested breed attributes
+    breed_ids = params[:breeds][:ids].select(&:present?).map(&:to_i)
+    if breed_ids.present?
+      breeds = breed_ids.map{ |id| Breed.find(id) }
+      @animal.breeds = breeds
+      @animal.save
     end
 
     respond_to do |format|
@@ -144,6 +158,8 @@ class AnimalsController < ApplicationController
   end
 
   # Only allow a list of trusted parameters through.
+  # I have tried a few variations of allowing through nested params, but none work #so_sad
+  # reset to original for the time being.
   def animal_params
     params.require(:animal).permit(:name, :dob, :description, :size)
   end
