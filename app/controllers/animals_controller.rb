@@ -1,3 +1,5 @@
+require 'aws/S3'
+require 'aws/S4'
 class AnimalsController < ApplicationController
   before_action :set_animal, only: %i[ show edit update destroy ]
 
@@ -36,19 +38,15 @@ class AnimalsController < ApplicationController
 
   # PATCH/PUT /animals/1 or /animals/1.json
   def update
-    animal_name = @animal.name || animal_params[:name] || ""
+
 
     # TODO: S3 refactors
     # - refactor S3 to library code
     # - constants file for keys etc
     # - bucket name for each stage
     # - permissions for S3 bucket are too lax
-    # - filename (key) should have date / time information in it.
-    s3 = Aws::S3::Client.new(
-      region: 'us-east-1',
-      access_key_id: Rails.application.credentials.aws[:access_key_id],
-      secret_access_key: Rails.application.credentials.aws[:secret_access_key]
-    )
+
+    s3 = S3.new.client # works
 
     bucket = 'doolittle-a1'
 
@@ -162,5 +160,9 @@ class AnimalsController < ApplicationController
   # reset to original for the time being.
   def animal_params
     params.require(:animal).permit(:name, :dob, :description, :size)
+  end
+
+  def animal_name
+    @animal.name || animal_params[:name] || ""
   end
 end
