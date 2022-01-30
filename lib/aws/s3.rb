@@ -1,7 +1,7 @@
 class S3
   REGION = 'us-east-1'.freeze
-  S3_ACCESS_KEY_ID = Rails.application.credentials.aws[:access_key_id]
-  S3_SECRET_ACCESS_KEY = Rails.application.credentials.aws[:secret_access_key]
+  # S3_ACCESS_KEY_ID = Rails.application.credentials.aws[:access_key_id]
+  # S3_SECRET_ACCESS_KEY = Rails.application.credentials.aws[:secret_access_key]
 
   def initialize
     @client = client
