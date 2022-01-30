@@ -42,10 +42,10 @@ jobs:
           echo "a foobar"
           ls -a
           ruby --version
-          bundle exec rubocop
+          # bundle exec rubocop
       # Add or replace test runners here
       - name: Run tests
-        run: bin/rake
+        run: bundle exec rspec
 
   lint:
     runs-on: ubuntu-latest
