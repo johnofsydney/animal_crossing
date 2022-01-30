@@ -1,7 +1,7 @@
 class S3
   REGION = 'us-east-1'.freeze
-  S3_ACCESS_KEY_ID = access_key_id
-  S3_SECRET_ACCESS_KEY = secret_access_key
+  # S3_ACCESS_KEY_ID = access_key_id
+  # S3_SECRET_ACCESS_KEY = secret_access_key
 
   def initialize
     @client = client
@@ -10,8 +10,8 @@ class S3
   def client
     @client ||= Aws::S3::Client.new(
       region: REGION,
-      access_key_id: S3_ACCESS_KEY_ID,
-      secret_access_key: S3_SECRET_ACCESS_KEY
+      access_key_id: access_key_id,
+      secret_access_key: secret_access_key
     )
   end
 
