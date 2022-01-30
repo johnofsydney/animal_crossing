@@ -17,6 +17,18 @@ RSpec.describe Animal, type: :model do
   let(:photo_link_one) { "url to photo one" }
   let(:photo_link_two) { "url to photo two" }
 
+  let(:aws_credentials_mock) do
+    {
+      access_key_id: "123",
+      secret_access_key: "456"
+
+    }
+  end
+
+  before do
+    allow(Rails.application.credentials).to receive(:aws).and_return(aws_credentials_mock)
+  end
+
   it { expect(animal.reload.name).to eq(name) }
   it { expect(animal.reload.dob).to eq(dob) }
 end
