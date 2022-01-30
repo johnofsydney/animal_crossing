@@ -1,5 +1,5 @@
 require 'aws/S3'
-require 'aws/S4'
+# require 'aws/S4'
 class AnimalsController < ApplicationController
   before_action :set_animal, only: %i[ show edit update destroy ]
 
@@ -41,14 +41,8 @@ class AnimalsController < ApplicationController
 
 
     # TODO: S3 refactors
-    # - refactor S3 to library code
-    # - constants file for keys etc
-    # - bucket name for each stage
     # - permissions for S3 bucket are too lax
-
-    s3 = S3.new.client # works
-
-    bucket = 'doolittle-a1'
+    # - make a plural version: put_objects
 
     # TODO: - safe params for nested photo attributes
     images = params['animal']['photos'].select(&:present?)
@@ -58,13 +52,13 @@ class AnimalsController < ApplicationController
         file = image.tempfile
         key = "photo-#{Date.today}-#{animal_name}-#{SecureRandom.hex(2)}"
 
-        s3.put_object(
-          bucket: bucket,
+        upload = S3.put_object(
+          bucket: photo_bucket,
           key: key,
           body: file
         )
 
-        photo = Photo.new(address: "http://#{bucket}.s3.us-east-1.amazonaws.com/#{key}")
+        photo = Photo.new(address: upload[:address])
         @animal.photos << photo
       end
 
@@ -92,21 +86,12 @@ class AnimalsController < ApplicationController
 
   # DELETE /animals/1 or /animals/1.json
   def destroy
-    # 1 delete photos from bucket
-    # TODO - refactor to use code from single delete_photo method below
-    s3 = Aws::S3::Client.new(
-      region: 'us-east-1',
-      access_key_id: Rails.application.credentials.aws[:access_key_id],
-      secret_access_key: Rails.application.credentials.aws[:secret_access_key]
-    )
-
-    bucket = 'doolittle-a1'
-
+    # TODO: make a plural version: delete_objects
     @animal.photos.each do |photo|
       key = photo.address.split('/').last
 
-      s3.delete_object(
-        bucket: bucket,
+      S3.delete_object(
+        bucket: photo_bucket,
         key: key
       )
     end
@@ -128,16 +113,9 @@ class AnimalsController < ApplicationController
 
     # 1 delete object from bucket
     key = photo.address.split('/').last
-    s3 = Aws::S3::Client.new(
-      region: 'us-east-1',
-      access_key_id: Rails.application.credentials.aws[:access_key_id],
-      secret_access_key: Rails.application.credentials.aws[:secret_access_key]
-    )
 
-    bucket = 'doolittle-a1'
-
-    s3.delete_object(
-      bucket: bucket,
+    S3.delete_object(
+      bucket: photo_bucket,
       key: key
     )
 
@@ -164,5 +142,9 @@ class AnimalsController < ApplicationController
 
   def animal_name
     @animal.name || animal_params[:name] || ""
+  end
+
+  def photo_bucket
+    "doolittle-a1"
   end
 end
