@@ -1,4 +1,4 @@
-require 'aws/S3'
+require 'aws/s3'
 # require 'aws/S4'
 class AnimalsController < ApplicationController
   before_action :set_animal, only: %i[show edit update destroy]
