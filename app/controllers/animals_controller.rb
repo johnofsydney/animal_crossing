@@ -1,16 +1,18 @@
-require 'aws/S3'
+require 'aws/s3'
 # require 'aws/S4'
 class AnimalsController < ApplicationController
-  before_action :set_animal, only: %i[ show edit update destroy ]
+  before_action :set_animal, only: %i[show edit update destroy]
 
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   # GET /animals or /animals.json
   def index
     @animals = Animal.all
   end
 
   # GET /animals/1 or /animals/1.json
-  def show
-  end
+  def show; end
 
   # GET /animals/new
   def new
@@ -18,8 +20,7 @@ class AnimalsController < ApplicationController
   end
 
   # GET /animals/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /animals or /animals.json
   def create
@@ -27,7 +28,7 @@ class AnimalsController < ApplicationController
 
     respond_to do |format|
       if @animal.save
-        format.html { redirect_to animal_url(@animal), notice: "Animal was successfully created." }
+        format.html { redirect_to animal_url(@animal), notice: 'Animal was successfully created.' }
         format.json { render :show, status: :created, location: @animal }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,8 +39,6 @@ class AnimalsController < ApplicationController
 
   # PATCH/PUT /animals/1 or /animals/1.json
   def update
-
-
     # TODO: S3 refactors
     # - permissions for S3 bucket are too lax
     # - make a plural version: put_objects
@@ -50,7 +49,7 @@ class AnimalsController < ApplicationController
     if images.present?
       images.each do |image|
         file = image.tempfile
-        key = "photo-#{Date.today}-#{animal_name}-#{SecureRandom.hex(2)}"
+        key = "photo-#{Time.zone.today}-#{animal_name}-#{SecureRandom.hex(2)}"
 
         upload = S3.put_object(
           bucket: photo_bucket,
@@ -68,14 +67,14 @@ class AnimalsController < ApplicationController
     # TODO: - safe params for nested breed attributes
     breed_ids = params[:breeds][:ids].select(&:present?).map(&:to_i)
     if breed_ids.present?
-      breeds = breed_ids.map{ |id| Breed.find(id) }
+      breeds = breed_ids.map { |id| Breed.find(id) }
       @animal.breeds = breeds
       @animal.save
     end
 
     respond_to do |format|
       if @animal.update(animal_params)
-        format.html { redirect_to animal_url(@animal), notice: "Animal was successfully updated." }
+        format.html { redirect_to animal_url(@animal), notice: 'Animal was successfully updated.' }
         format.json { render :show, status: :ok, location: @animal }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -99,7 +98,7 @@ class AnimalsController < ApplicationController
     @animal.destroy
 
     respond_to do |format|
-      format.html { redirect_to animals_url, notice: "Animal was successfully destroyed." }
+      format.html { redirect_to animals_url, notice: 'Animal was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -108,7 +107,7 @@ class AnimalsController < ApplicationController
     animal_id = params[:animal_id].to_i
     photo_id = params[:photo_id].to_i
 
-    @animal = Animal.find(params[:animal_id])
+    @animal = Animal.find(animal_id)
     photo = Photo.find(photo_id)
 
     # 1 delete object from bucket
@@ -141,10 +140,14 @@ class AnimalsController < ApplicationController
   end
 
   def animal_name
-    @animal.name || animal_params[:name] || ""
+    @animal.name || animal_params[:name] || ''
   end
 
   def photo_bucket
-    "doolittle-a1"
+    'doolittle-a1'
   end
+
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 end

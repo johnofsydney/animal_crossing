@@ -1,5 +1,5 @@
 class BreedsController < ApplicationController
-  before_action :set_breed, only: %i[ show edit update destroy ]
+  before_action :set_breed, only: %i[show edit update destroy]
 
   # GET /breeds or /breeds.json
   def index
@@ -7,8 +7,7 @@ class BreedsController < ApplicationController
   end
 
   # GET /breeds/1 or /breeds/1.json
-  def show
-  end
+  def show; end
 
   # GET /breeds/new
   def new
@@ -16,8 +15,7 @@ class BreedsController < ApplicationController
   end
 
   # GET /breeds/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /breeds or /breeds.json
   def create
@@ -25,7 +23,7 @@ class BreedsController < ApplicationController
 
     respond_to do |format|
       if @breed.save
-        format.html { redirect_to breed_url(@breed), notice: "Breed was successfully created." }
+        format.html { redirect_to breed_url(@breed), notice: 'Breed was successfully created.' }
         format.json { render :show, status: :created, location: @breed }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +36,7 @@ class BreedsController < ApplicationController
   def update
     respond_to do |format|
       if @breed.update(breed_params)
-        format.html { redirect_to breed_url(@breed), notice: "Breed was successfully updated." }
+        format.html { redirect_to breed_url(@breed), notice: 'Breed was successfully updated.' }
         format.json { render :show, status: :ok, location: @breed }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,19 +50,20 @@ class BreedsController < ApplicationController
     @breed.destroy
 
     respond_to do |format|
-      format.html { redirect_to breeds_url, notice: "Breed was successfully destroyed." }
+      format.html { redirect_to breeds_url, notice: 'Breed was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_breed
-      @breed = Breed.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def breed_params
-      params.require(:breed).permit(:breed)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_breed
+    @breed = Breed.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def breed_params
+    params.require(:breed).permit(:breed)
+  end
 end
