@@ -43,7 +43,7 @@ jobs:
           ls -a
           ruby --version
           rails --version
-          bundke exec rubocop
+          bundle exec rubocop
       # Add or replace test runners here
       - name: Run tests
         run: bin/rake
