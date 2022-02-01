@@ -19,6 +19,4 @@ RSpec.describe Animal, type: :model do
 
   it { expect(animal.reload.name).to eq(name) }
   it { expect(animal.reload.dob).to eq(dob) }
-
-
 end
