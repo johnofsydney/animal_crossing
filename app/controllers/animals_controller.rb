@@ -12,7 +12,9 @@ class AnimalsController < ApplicationController
   end
 
   # GET /animals/1 or /animals/1.json
-  def show; end
+  def show
+    @animal
+  end
 
   # GET /animals/new
   def new
