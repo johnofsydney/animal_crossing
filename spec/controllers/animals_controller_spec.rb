@@ -55,4 +55,33 @@ RSpec.describe AnimalsController, type: :controller do
       expect(assigns(:animal)).to eq(animal_one)
     end
   end
+
+  describe '#create' do
+    it 'creates a new record' do
+      post :create, params: { animal: { name: 'duncan' } }
+      expect(assigns[:animal]).to eq(Animal.first)
+    end
+  end
+
+  describe '#update' do
+    let!(:animal) do
+      Animal.create(name: 'John')
+    end
+
+    it 'updates a record' do
+      post :create, params: { animal: { id: animal.id, name: 'duncan' } }
+      expect(assigns[:animal].name).to eq('duncan')
+    end
+  end
+
+  describe '#destroy' do
+    let!(:animal) do
+      Animal.create(name: 'John')
+    end
+
+    it 'destroy a record' do
+      delete :destroy, params: { id: animal.id }
+      expect(Animal.count).to eq(0)
+    end
+  end
 end
