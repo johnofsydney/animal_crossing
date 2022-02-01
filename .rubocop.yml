@@ -74,3 +74,4 @@ Style/Documentation:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
+# make some delicous comments
