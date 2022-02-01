@@ -73,4 +73,3 @@ Style/Documentation:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
-
