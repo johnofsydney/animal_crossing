@@ -127,6 +127,12 @@ class AnimalsController < ApplicationController
     redirect_to edit_animal_path(@animal)
   end
 
+  def search
+  end
+
+  def results
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

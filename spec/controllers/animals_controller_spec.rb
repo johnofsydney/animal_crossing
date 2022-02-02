@@ -84,4 +84,35 @@ RSpec.describe AnimalsController, type: :controller do
       expect(Animal.count).to eq(0)
     end
   end
+
+  describe '#search' do
+    it 'renders the search template' do
+      get :search
+
+      expect(response).to render_template('search')
+    end
+  end
+
+  describe '#results' do
+    let(:params) do
+      {
+        query: {
+          size: 'small'
+        }
+      }
+    end
+
+    it 'renders the search template' do
+      get :results, params: params
+
+      expect(response).to render_template('results')
+    end
+
+
+    it 'assigns the records' do
+      get :results, params: params
+
+      expect(assigns(:animals)).to eq(['animal_one', 'animal_two', 'animal_three'])
+    end
+  end
 end
