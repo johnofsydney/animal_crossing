@@ -114,8 +114,12 @@ class AnimalsController < ApplicationController
   def search; end
 
   def results
-    @animals = Animal.where(size: params[:size])
-                     .where(name: params[:name])
+    size = safe_params[:size]
+    name = safe_params[:name]
+
+    @animals = Animal.all
+    @animals = @animals.where(size: size) if size.present?
+    @animals = @animals.where('name ILIKE :name OR description ILIKE :name', name: "%#{name}%") if name.present?
   end
 
   private
@@ -128,6 +132,10 @@ class AnimalsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def animal_params
     params.require(:animal).permit(:name, :dob, :description, :size)
+  end
+
+  def safe_params
+    params.permit(:size, :name)
   end
 
   def animal_name

@@ -5,7 +5,7 @@
   <%= form.text_field :name %>
   <%= form.label :size, "Search for size:" %>
 
-  <%= form.select :size, ["small", "medium", "large"] %>
+  <%= form.select :size, Animal.sizes, { include_blank: true } %>
 
   <%= form.submit "Search" %>
 <% end %>
