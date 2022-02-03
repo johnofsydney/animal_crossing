@@ -1,29 +1,32 @@
 require 'rails_helper'
 
 RSpec.describe AnimalsController, type: :controller do
+  let(:animal_one) do
+    Animal.create(
+      name: 'foobar',
+      size: 'small'
+    )
+  end
+
+  let(:animal_two) do
+    Animal.create(
+      name: 'bazfoo',
+      size: 'small'
+    )
+  end
+
+  let(:animal_three) do
+    Animal.create(
+      name: 'foobar',
+      size: 'large'
+    )
+  end
+
   describe '#index' do
     before do
       animal_one
       animal_two
       animal_three
-    end
-
-    let(:animal_one) do
-      Animal.create(
-        name: 'foobar'
-      )
-    end
-
-    let(:animal_two) do
-      Animal.create(
-        name: 'foobar'
-      )
-    end
-
-    let(:animal_three) do
-      Animal.create(
-        name: 'foobar'
-      )
     end
 
     it 'assigns the records' do
@@ -94,11 +97,16 @@ RSpec.describe AnimalsController, type: :controller do
   end
 
   describe '#results' do
+    before do
+      animal_one
+      animal_two
+      animal_three
+    end
+
     let(:params) do
       {
-        query: {
-          size: 'small'
-        }
+        size: 'small',
+        name: 'foobar'
       }
     end
 
@@ -108,11 +116,10 @@ RSpec.describe AnimalsController, type: :controller do
       expect(response).to render_template('results')
     end
 
-
     it 'assigns the records' do
       get :results, params: params
 
-      expect(assigns(:animals)).to eq(['animal_one', 'animal_two', 'animal_three'])
+      expect(assigns(:animals)).to eq([animal_one])
     end
   end
 end

@@ -1,0 +1,11 @@
+
+
+<%= form_with url: "/animals/results", method: :get do |form| %>
+  <%= form.label :query, "Search for name:" %>
+  <%= form.text_field :name %>
+  <%= form.label :size, "Search for size:" %>
+
+  <%= form.select :size, ["small", "medium", "large"] %>
+
+  <%= form.submit "Search" %>
+<% end %>

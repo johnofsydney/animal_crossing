@@ -28,15 +28,7 @@ class AnimalsController < ApplicationController
   def create
     @animal = Animal.new(animal_params)
 
-    respond_to do |format|
-      if @animal.save
-        format.html { redirect_to animal_url(@animal), notice: 'Animal was successfully created.' }
-        format.json { render :show, status: :created, location: @animal }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @animal.errors, status: :unprocessable_entity }
-      end
-    end
+    redirect_to animal_url(@animal), notice: 'Animal was successfully created.' if @animal.save
   end
 
   # PATCH/PUT /animals/1 or /animals/1.json
@@ -74,15 +66,7 @@ class AnimalsController < ApplicationController
       @animal.save
     end
 
-    respond_to do |format|
-      if @animal.update(animal_params)
-        format.html { redirect_to animal_url(@animal), notice: 'Animal was successfully updated.' }
-        format.json { render :show, status: :ok, location: @animal }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @animal.errors, status: :unprocessable_entity }
-      end
-    end
+    redirect_to animal_url(@animal), notice: 'Animal was successfully updated.' if @animal.update(animal_params)
   end
 
   # DELETE /animals/1 or /animals/1.json
@@ -127,10 +111,11 @@ class AnimalsController < ApplicationController
     redirect_to edit_animal_path(@animal)
   end
 
-  def search
-  end
+  def search; end
 
   def results
+    @animals = Animal.where(size: params[:size])
+                     .where(name: params[:name])
   end
 
   private
@@ -141,8 +126,6 @@ class AnimalsController < ApplicationController
   end
 
   # Only allow a list of trusted parameters through.
-  # I have tried a few variations of allowing through nested params, but none work #so_sad
-  # reset to original for the time being.
   def animal_params
     params.require(:animal).permit(:name, :dob, :description, :size)
   end
@@ -154,7 +137,6 @@ class AnimalsController < ApplicationController
   def photo_bucket
     'doolittle-a1'
   end
-
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity
