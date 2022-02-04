@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe AnimalsController, type: :controller do
+  let(:breed) { Breed.create(breed: 'Cavoodle') }
+
   describe '#index' do
     before do
       animal_one
@@ -64,13 +66,51 @@ RSpec.describe AnimalsController, type: :controller do
   end
 
   describe '#update' do
-    let!(:animal) do
+    before do
+      allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
+      allow(mock_s3_client).to receive(:put_object)
+    end
+
+    let(:mock_s3_client) do
+      Aws::S3::Client.new(stub_responses: true)
+    end
+
+    let(:animal) do
       Animal.create(name: 'John')
     end
 
+    let(:params) do
+      {
+        id: animal.id,
+        animal: {
+          name: 'duncan',
+          photos: [photo]
+        },
+        breeds: {
+          ids: [breed.id]
+        }
+      }
+    end
+
+    let(:photo) do
+      fixture_file_upload('SpongeBob.svg.png', 'image/png')
+    end
+
     it 'updates a record' do
-      post :create, params: { animal: { id: animal.id, name: 'duncan' } }
+      put :update, params: params
       expect(assigns[:animal].name).to eq('duncan')
+    end
+
+    it 'puts an object into S3' do
+      put :update, params: params
+
+      expect(mock_s3_client).to have_received(:put_object)
+    end
+
+    it 'save the photo address on the photo for the animal' do
+      put :update, params: params
+
+      expect(animal.reload.photos.first.address).to match('amazonaws.com/photo')
     end
   end
 
