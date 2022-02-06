@@ -73,3 +73,7 @@ Style/Documentation:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 9 # number of let variables available to an example group

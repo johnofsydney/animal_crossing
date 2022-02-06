@@ -1,11 +1,7 @@
 class S3
   REGION = 'us-east-1'.freeze
-  # S3_ACCESS_KEY_ID = access_key_id
-  # S3_SECRET_ACCESS_KEY = secret_access_key
 
-  def initialize
-    @client = client
-  end
+  def initialize; end
 
   def client
     @client ||= Aws::S3::Client.new(
@@ -16,8 +12,8 @@ class S3
   end
 
   # rubocop:disable Metrics/MethodLength
-  def self.put_object(bucket:, key:, body:)
-    new.client.put_object(bucket: bucket, key: key, body: body)
+  def put_object(bucket:, key:, body:)
+    client.put_object(bucket: bucket, key: key, body: body)
 
     # TODO: handle error in saving
     {
@@ -28,12 +24,12 @@ class S3
     }
   end
 
-  def self.delete_object(bucket:, key:)
+  def delete_object(bucket:, key:)
     # TODO: setup logger
     # logger.debug "Deleting #{key} from #{bucket}. INFO"
     # logger.info "Deleting #{key} from #{bucket}. DEBUG"
 
-    new.client.delete_object(bucket: bucket, key: key)
+    client.delete_object(bucket: bucket, key: key)
 
     # TODO: handle error in deletion
     {
@@ -45,16 +41,14 @@ class S3
 
   def access_key_id
     Rails.application.credentials.aws[:access_key_id]
-  rescue => e # rubocop:disable Style/RescueStandardError
-    e.inspect
-    'rescued'
+  rescue NoMethodError => e
+    e.inspect # fix for CI
   end
 
   def secret_access_key
     Rails.application.credentials.aws[:secret_access_key]
-  rescue => e # rubocop:disable Style/RescueStandardError
-    e.inspect
-    'rescued'
+  rescue NoMethodError => e
+    e.inspect # fix for CI
   end
   # rubocop:enable Metrics/MethodLength
 end
