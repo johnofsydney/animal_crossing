@@ -28,7 +28,11 @@ class AnimalsController < ApplicationController
   def create
     @animal = Animal.new(animal_params)
 
-    redirect_to animal_url(@animal), notice: 'Animal was successfully created.' if @animal.save
+    if @animal.save
+      redirect_to animal_url(@animal), notice: 'Animal was successfully created.'
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /animals/1 or /animals/1.json
@@ -66,7 +70,11 @@ class AnimalsController < ApplicationController
       @animal.save
     end
 
-    redirect_to animal_url(@animal), notice: 'Animal was successfully updated.' if @animal.update(animal_params)
+    if @animal.update(animal_params)
+      redirect_to animal_url(@animal), notice: 'Animal was successfully updated.'
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   # DELETE /animals/1 or /animals/1.json
