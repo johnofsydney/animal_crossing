@@ -1,29 +1,32 @@
 require 'rails_helper'
 
 RSpec.describe AnimalsController, type: :controller do
+  let(:animal_one) do
+    Animal.create(
+      name: 'foobar',
+      size: 'small'
+    )
+  end
+
+  let(:animal_two) do
+    Animal.create(
+      name: 'bazfoo',
+      size: 'small'
+    )
+  end
+
+  let(:animal_three) do
+    Animal.create(
+      name: 'foobar',
+      size: 'large'
+    )
+  end
+
   describe '#index' do
     before do
       animal_one
       animal_two
       animal_three
-    end
-
-    let(:animal_one) do
-      Animal.create(
-        name: 'foobar'
-      )
-    end
-
-    let(:animal_two) do
-      Animal.create(
-        name: 'foobar'
-      )
-    end
-
-    let(:animal_three) do
-      Animal.create(
-        name: 'foobar'
-      )
     end
 
     it 'assigns the records' do
@@ -82,6 +85,53 @@ RSpec.describe AnimalsController, type: :controller do
     it 'destroy a record' do
       delete :destroy, params: { id: animal.id }
       expect(Animal.count).to eq(0)
+    end
+  end
+
+  describe '#search' do
+    before do
+      animal_one
+      animal_two
+      animal_three
+    end
+
+    let(:params) do
+      {
+        size: 'small',
+        name: 'foobar'
+      }
+    end
+
+    it 'renders the search template' do
+      get :search
+
+      expect(response).to render_template('search')
+    end
+
+    it 'assigns the records' do
+      get :search, params: params
+
+      expect(assigns(:animals)).to eq([animal_one])
+    end
+
+    context 'when the params (from the search form) are blank' do
+      let(:params) { { size: '', name: '' } }
+
+      it 'assigns the records' do
+        get :search, params: params
+
+        expect(assigns(:animals)).to eq([animal_one, animal_two, animal_three])
+      end
+    end
+
+    context 'when the params are not present' do
+      let(:params) { {} }
+
+      it 'assigns the records' do
+        get :search, params: params
+
+        expect(assigns(:animals)).to eq([animal_one, animal_two, animal_three])
+      end
     end
   end
 end
