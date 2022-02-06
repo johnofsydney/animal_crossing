@@ -42,15 +42,13 @@ class S3
   def access_key_id
     Rails.application.credentials.aws[:access_key_id]
   rescue NoMethodError => e
-    e.inspect
-    'rescued'
+    e.inspect # fix for CI
   end
 
   def secret_access_key
     Rails.application.credentials.aws[:secret_access_key]
   rescue NoMethodError => e
-    e.inspect
-    'rescued'
+    e.inspect # fix for CI
   end
   # rubocop:enable Metrics/MethodLength
 end
