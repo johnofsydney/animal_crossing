@@ -45,7 +45,6 @@ RSpec.describe S3 do
     let(:bucket) { 'bucket' }
     let(:key) { 'key' }
 
-
     it { expect(delete_object[:success]).to eq(true) }
 
     it 'invokes the SWS S3 client' do
