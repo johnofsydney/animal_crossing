@@ -41,16 +41,16 @@ class S3
 
   def access_key_id
     Rails.application.credentials.aws[:access_key_id]
-    # rescue => e ##Rubocop:disable Style/RescueStandardError
-    # e.inspect
-    # 'rescued'
+  rescue NoMethodError => e
+    e.inspect
+    'rescued'
   end
 
   def secret_access_key
     Rails.application.credentials.aws[:secret_access_key]
-    # rescue => e ##Rubocop:disable Style/RescueStandardError
-    # e.inspect
-    # 'rescued'
+  rescue NoMethodError => e
+    e.inspect
+    'rescued'
   end
   # rubocop:enable Metrics/MethodLength
 end
