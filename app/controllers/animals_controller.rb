@@ -49,11 +49,13 @@ class AnimalsController < ApplicationController
     images = params['animal']['photos'].select(&:present?)
 
     if images.present?
+      s3 = S3.new
+
       images.each do |image|
         file = image.tempfile
         key = "photo-#{Time.zone.today}-#{animal_name}-#{SecureRandom.hex(2)}"
 
-        upload = S3.put_object(
+        upload = s3.put_object(
           bucket: photo_bucket,
           key: key,
           body: file
@@ -88,10 +90,12 @@ class AnimalsController < ApplicationController
   # DELETE /animals/1 or /animals/1.json
   def destroy
     # TODO: make a plural version: delete_objects
+
+    s3 = S3.new
     @animal.photos.each do |photo|
       key = photo.address.split('/').last
 
-      S3.delete_object(
+      s3.delete_object(
         bucket: photo_bucket,
         key: key
       )
@@ -106,6 +110,8 @@ class AnimalsController < ApplicationController
   end
 
   def delete_photo
+    s3 = S3.new
+
     animal_id = params[:animal_id].to_i
     photo_id = params[:photo_id].to_i
 
@@ -115,7 +121,7 @@ class AnimalsController < ApplicationController
     # 1 delete object from bucket
     key = photo.address.split('/').last
 
-    S3.delete_object(
+    s3.delete_object(
       bucket: photo_bucket,
       key: key
     )

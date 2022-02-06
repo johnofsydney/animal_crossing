@@ -115,13 +115,64 @@ RSpec.describe AnimalsController, type: :controller do
   end
 
   describe '#destroy' do
+    before do
+      allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
+      allow(mock_s3_client).to receive(:delete_object)
+    end
+
+    let(:mock_s3_client) do
+      Aws::S3::Client.new(stub_responses: true)
+    end
+
     let!(:animal) do
-      Animal.create(name: 'John')
+      Animal.create(
+        name: 'John',
+        photos: [
+          Photo.create(address: 's3bucketaddress')
+        ]
+      )
     end
 
     it 'destroy a record' do
       delete :destroy, params: { id: animal.id }
       expect(Animal.count).to eq(0)
+    end
+
+    it 'sends a delete request to S3' do
+      delete :destroy, params: { id: animal.id }
+      expect(mock_s3_client).to have_received(:delete_object)
+    end
+  end
+
+  describe '#delete_photo' do
+    before do
+      allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
+      allow(mock_s3_client).to receive(:delete_object)
+    end
+
+    let(:mock_s3_client) do
+      Aws::S3::Client.new(stub_responses: true)
+    end
+
+    let!(:animal) do
+      Animal.create(
+        name: 'John',
+        photos: [
+          photo
+        ]
+      )
+    end
+    let(:photo) { Photo.create(address: 's3bucketaddress') }
+
+    it 'destroy a record', :aggregate_failures do
+      delete :delete_photo, params: { animal_id: animal.id, photo_id: photo.id }
+      expect(Animal.count).to eq(1) # Animal is not deleted
+      expect(Photo.count).to eq(0) # Photo is deleted
+    end
+
+    it 'sends a delete request to S3' do
+      delete :delete_photo, params: { animal_id: animal.id, photo_id: photo.id }
+      expect(mock_s3_client).to have_received(:delete_object)
     end
   end
 end

@@ -4,7 +4,7 @@ class S3
   # S3_SECRET_ACCESS_KEY = secret_access_key
 
   def initialize
-    @client = client
+    # @client = client
   end
 
   def client
@@ -16,8 +16,8 @@ class S3
   end
 
   # rubocop:disable Metrics/MethodLength
-  def self.put_object(bucket:, key:, body:)
-    new.client.put_object(bucket: bucket, key: key, body: body)
+  def put_object(bucket:, key:, body:)
+    client.put_object(bucket: bucket, key: key, body: body)
 
     # TODO: handle error in saving
     {
@@ -28,12 +28,12 @@ class S3
     }
   end
 
-  def self.delete_object(bucket:, key:)
+  def delete_object(bucket:, key:)
     # TODO: setup logger
     # logger.debug "Deleting #{key} from #{bucket}. INFO"
     # logger.info "Deleting #{key} from #{bucket}. DEBUG"
 
-    new.client.delete_object(bucket: bucket, key: key)
+    client.delete_object(bucket: bucket, key: key)
 
     # TODO: handle error in deletion
     {
