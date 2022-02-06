@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   delete '/animals/:animal_id/delete_photo/:photo_id' => 'animals#delete_photo'
 
   get '/animals/search' => 'animals#search'
-  get '/animals/results' => 'animals#results'
 
   resources :photos
   resources :animals

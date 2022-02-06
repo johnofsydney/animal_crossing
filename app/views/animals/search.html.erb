@@ -1,11 +1,27 @@
+<p style="color: green"><%= notice %></p>
 
+<div>
+  <h2>Search</h2>
 
-<%= form_with url: "/animals/results", method: :get do |form| %>
-  <%= form.label :query, "Search for name:" %>
-  <%= form.text_field :name %>
-  <%= form.label :size, "Search for size:" %>
+  <%= form_with url: "/animals/search", method: :get do |form| %>
+    <%= form.label :query, "Search for name:" %>
+    <%= form.text_field :name %>
+    <%= form.label :size, "Search for size:" %>
 
-  <%= form.select :size, Animal.sizes, { include_blank: true } %>
+    <%= form.select :size, Animal.sizes, { include_blank: true } %>
 
-  <%= form.submit "Search" %>
-<% end %>
+    <%= form.submit "Do the Search" %>
+  <% end %>
+
+</div>
+
+<h1>Animals</h1>
+
+<div id="animals">
+  <% @animals.each do |animal| %>
+    <%= render animal %>
+    <p>
+      <%= link_to "Show this animal", animal %>
+    </p>
+  <% end %>
+</div>

@@ -111,13 +111,13 @@ class AnimalsController < ApplicationController
     redirect_to edit_animal_path(@animal)
   end
 
-  def search; end
+  def search
+    @animals = Animal.all
+    return @animals if safe_params.values.all?(&:empty?)
 
-  def results
     size = safe_params[:size]
     name = safe_params[:name]
 
-    @animals = Animal.all
     @animals = @animals.where(size: size) if size.present?
     @animals = @animals.where('name ILIKE :name OR description ILIKE :name', name: "%#{name}%") if name.present?
   end
