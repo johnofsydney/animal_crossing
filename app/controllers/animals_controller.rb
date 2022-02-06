@@ -28,14 +28,10 @@ class AnimalsController < ApplicationController
   def create
     @animal = Animal.new(animal_params)
 
-    respond_to do |format|
-      if @animal.save
-        format.html { redirect_to animal_url(@animal), notice: 'Animal was successfully created.' }
-        format.json { render :show, status: :created, location: @animal }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @animal.errors, status: :unprocessable_entity }
-      end
+    if @animal.save
+      redirect_to animal_url(@animal), notice: 'Animal was successfully created.'
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -76,14 +72,10 @@ class AnimalsController < ApplicationController
       @animal.save
     end
 
-    respond_to do |format|
-      if @animal.update(animal_params)
-        format.html { redirect_to animal_url(@animal), notice: 'Animal was successfully updated.' }
-        format.json { render :show, status: :ok, location: @animal }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @animal.errors, status: :unprocessable_entity }
-      end
+    if @animal.update(animal_params)
+      redirect_to animal_url(@animal), notice: 'Animal was successfully updated.'
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -102,11 +94,7 @@ class AnimalsController < ApplicationController
     end
 
     @animal.destroy
-
-    respond_to do |format|
-      format.html { redirect_to animals_url, notice: 'Animal was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to animals_url, notice: 'Animal was successfully destroyed.'
   end
 
   def delete_photo
@@ -133,6 +121,17 @@ class AnimalsController < ApplicationController
     redirect_to edit_animal_path(@animal)
   end
 
+  def search
+    @animals = Animal.all
+    return @animals if safe_params.values.all?(&:empty?)
+
+    size = safe_params[:size]
+    name = safe_params[:name]
+
+    @animals = @animals.where(size: size) if size.present?
+    @animals = @animals.where('name ILIKE :name OR description ILIKE :name', name: "%#{name}%") if name.present?
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -141,10 +140,12 @@ class AnimalsController < ApplicationController
   end
 
   # Only allow a list of trusted parameters through.
-  # I have tried a few variations of allowing through nested params, but none work #so_sad
-  # reset to original for the time being.
   def animal_params
     params.require(:animal).permit(:name, :dob, :description, :size)
+  end
+
+  def safe_params
+    params.permit(:size, :name)
   end
 
   def animal_name
@@ -154,7 +155,6 @@ class AnimalsController < ApplicationController
   def photo_bucket
     'doolittle-a1'
   end
-
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity

@@ -2,30 +2,23 @@ require 'rails_helper'
 
 RSpec.describe AnimalsController, type: :controller do
   let(:breed) { Breed.create(breed: 'Cavoodle') }
+  let(:animal_one) do
+    Animal.create(name: 'foobar', size: 'small')
+  end
+
+  let(:animal_two) do
+    Animal.create(name: 'bazfoo', size: 'small')
+  end
+
+  let(:animal_three) do
+    Animal.create(name: 'foobar', size: 'large')
+  end
 
   describe '#index' do
     before do
       animal_one
       animal_two
       animal_three
-    end
-
-    let(:animal_one) do
-      Animal.create(
-        name: 'foobar'
-      )
-    end
-
-    let(:animal_two) do
-      Animal.create(
-        name: 'foobar'
-      )
-    end
-
-    let(:animal_three) do
-      Animal.create(
-        name: 'foobar'
-      )
     end
 
     it 'assigns the records' do
@@ -75,13 +68,13 @@ RSpec.describe AnimalsController, type: :controller do
       Aws::S3::Client.new(stub_responses: true)
     end
 
-    let(:animal) do
-      Animal.create(name: 'John')
-    end
+    # let(:animal) do
+    #   Animal.create(name: 'John')
+    # end
 
     let(:params) do
       {
-        id: animal.id,
+        id: animal_one.id,
         animal: {
           name: 'duncan',
           photos: [photo]
@@ -110,7 +103,7 @@ RSpec.describe AnimalsController, type: :controller do
     it 'save the photo address on the photo for the animal' do
       put :update, params: params
 
-      expect(animal.reload.photos.first.address).to match('amazonaws.com/photo')
+      expect(animal_one.reload.photos.first.address).to match('amazonaws.com/photo')
     end
   end
 
@@ -173,6 +166,53 @@ RSpec.describe AnimalsController, type: :controller do
     it 'sends a delete request to S3' do
       delete :delete_photo, params: { animal_id: animal.id, photo_id: photo.id }
       expect(mock_s3_client).to have_received(:delete_object)
+    end
+  end
+
+  describe '#search' do
+    before do
+      animal_one
+      animal_two
+      animal_three
+    end
+
+    let(:params) do
+      {
+        size: 'small',
+        name: 'foobar'
+      }
+    end
+
+    it 'renders the search template' do
+      get :search
+
+      expect(response).to render_template('search')
+    end
+
+    it 'assigns the records' do
+      get :search, params: params
+
+      expect(assigns(:animals)).to eq([animal_one])
+    end
+
+    context 'when the params (from the search form) are blank' do
+      let(:params) { { size: '', name: '' } }
+
+      it 'assigns the records' do
+        get :search, params: params
+
+        expect(assigns(:animals)).to eq([animal_one, animal_two, animal_three])
+      end
+    end
+
+    context 'when the params are not present' do
+      let(:params) { {} }
+
+      it 'assigns the records' do
+        get :search, params: params
+
+        expect(assigns(:animals)).to eq([animal_one, animal_two, animal_three])
+      end
     end
   end
 end
