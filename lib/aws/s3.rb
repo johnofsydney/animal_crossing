@@ -4,6 +4,7 @@ class S3
   # - make a plural version: put_objects
 
   REGION = 'us-east-1'.freeze
+  PHOTO_BUCKET = 'doolittle-a1'.freeze
 
   attr_reader :bucket
 

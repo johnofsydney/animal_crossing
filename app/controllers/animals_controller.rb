@@ -3,7 +3,6 @@ require 'aws/s3'
 class AnimalsController < ApplicationController
   before_action :set_animal, only: %i[show edit update destroy]
 
-  # rubocop:disable Metrics/AbcSize
   # GET /animals or /animals.json
   def index
     @animals = Animal.all
@@ -35,19 +34,13 @@ class AnimalsController < ApplicationController
 
   # PATCH/PUT /animals/1 or /animals/1.json
   def update
+    # send the animal object and params to update services for photos and breeds
     # TODO: - safe params for nested photo attributes
-    AddPhotosService.new(@animal, params).process
-
     # TODO: - safe params for nested breed attributes
+    PhotosService.new(@animal, params).add_photos
     WriteBreedsService.new(@animal, params).process
 
-    breed_ids = params[:breeds][:ids].select(&:present?).map(&:to_i)
-    if breed_ids.present?
-      breeds = breed_ids.map { |id| Breed.find(id) }
-      @animal.breeds = breeds
-      @animal.save
-    end
-
+    # fields on the animal object updated in the standard way
     if @animal.update(animal_params)
       redirect_to animal_url(@animal), notice: 'Animal was successfully updated.'
     else
@@ -57,39 +50,18 @@ class AnimalsController < ApplicationController
 
   # DELETE /animals/1 or /animals/1.json
   def destroy
-    # TODO: make a plural version: delete_objects
-
-    s3_buckety = S3.new(photo_bucket)
-    @animal.photos.each do |photo|
-      key = photo.address.split('/').last
-
-      s3_buckety.delete_object(
-        key: key
-      )
-    end
+    # Delete all of the associated photos from S3
+    PhotosService.new(@animal).delete_photos
 
     @animal.destroy
     redirect_to animals_url, notice: 'Animal was successfully destroyed.'
   end
 
   def delete_photo
-    s3_buckety = S3.new(photo_bucket)
-
     animal_id = params[:animal_id].to_i
-    photo_id = params[:photo_id].to_i
-
     @animal = Animal.find(animal_id)
-    photo = Photo.find(photo_id)
-
-    # 1 delete object from bucket
-    key = photo.address.split('/').last
-
-    s3_buckety.delete_object(
-      key: key
-    )
-
-    # 2 destroy rails record
-    @animal.photos.destroy(photo)
+    # Delete the photos from S3 _and_ destroy the records from the DB
+    PhotosService.new(@animal, params).delete_photo
 
     # redirect_to @animal
     redirect_to edit_animal_path(@animal)
@@ -97,10 +69,10 @@ class AnimalsController < ApplicationController
 
   def search
     @animals = Animal.all
-    return @animals if safe_params.values.all?(&:empty?)
+    return @animals if search_params.values.all?(&:empty?)
 
-    size = safe_params[:size]
-    name = safe_params[:name]
+    size = search_params[:size]
+    name = search_params[:name]
 
     @animals = @animals.where(size: size) if size.present?
     @animals = @animals.where('name ILIKE :name OR description ILIKE :name', name: "%#{name}%") if name.present?
@@ -118,16 +90,7 @@ class AnimalsController < ApplicationController
     params.require(:animal).permit(:name, :dob, :description, :size)
   end
 
-  def safe_params
+  def search_params
     params.permit(:size, :name)
   end
-
-  # def animal_name
-  #   @animal.name || animal_params[:name] || ''
-  # end
-
-  def photo_bucket
-    'doolittle-a1'
-  end
-  # rubocop:enable Metrics/AbcSize
 end
