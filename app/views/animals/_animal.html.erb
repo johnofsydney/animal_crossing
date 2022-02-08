@@ -1,0 +1,27 @@
+<div id="<%= dom_id animal %>">
+  <p>
+    <strong>Name:</strong>
+    <%= animal.name %>
+  </p>
+
+  <p>
+    <strong>Dob:</strong>
+    <%= animal.dob %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= animal.description %>
+  </p>
+
+  <p>
+    <strong>Size:</strong>
+    <%= animal.size %>
+  </p>
+
+  <p>
+    <strong>Breeds:</strong>
+    <%= animal.breeds.map{ |b| b.breed }.join(", ") %>
+  </p>
+
+</div>
