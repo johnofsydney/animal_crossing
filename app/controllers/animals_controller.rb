@@ -35,36 +35,12 @@ class AnimalsController < ApplicationController
 
   # PATCH/PUT /animals/1 or /animals/1.json
   def update
-    # TODO: S3 refactors
-    # - permissions for S3 bucket are too lax
-    # - make a plural version: put_objects
-
     # TODO: - safe params for nested photo attributes
     AddPhotosService.new(@animal, params).process
 
-    # images = params['animal']['photos'].select(&:present?)
-
-    # if images.present?
-    #   s3 = S3.new
-
-    #   images.each do |image|
-    #     file = image.tempfile
-    #     key = "photo-#{Time.zone.today}-#{animal_name}-#{SecureRandom.hex(2)}"
-
-    #     upload = s3.put_object(
-    #       bucket: photo_bucket,
-    #       key: key,
-    #       body: file
-    #     )
-
-    #     photo = Photo.new(address: upload[:address])
-    #     @animal.photos << photo
-    #   end
-
-    #   @animal.save
-    # end
-
     # TODO: - safe params for nested breed attributes
+    WriteBreedsService.new(@animal, params).process
+
     breed_ids = params[:breeds][:ids].select(&:present?).map(&:to_i)
     if breed_ids.present?
       breeds = breed_ids.map { |id| Breed.find(id) }
@@ -83,12 +59,11 @@ class AnimalsController < ApplicationController
   def destroy
     # TODO: make a plural version: delete_objects
 
-    s3 = S3.new
+    s3_buckety = S3.new(photo_bucket)
     @animal.photos.each do |photo|
       key = photo.address.split('/').last
 
-      s3.delete_object(
-        bucket: photo_bucket,
+      s3_buckety.delete_object(
         key: key
       )
     end
@@ -98,7 +73,7 @@ class AnimalsController < ApplicationController
   end
 
   def delete_photo
-    s3 = S3.new
+    s3_buckety = S3.new(photo_bucket)
 
     animal_id = params[:animal_id].to_i
     photo_id = params[:photo_id].to_i
@@ -109,8 +84,7 @@ class AnimalsController < ApplicationController
     # 1 delete object from bucket
     key = photo.address.split('/').last
 
-    s3.delete_object(
-      bucket: photo_bucket,
+    s3_buckety.delete_object(
       key: key
     )
 

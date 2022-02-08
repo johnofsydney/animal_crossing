@@ -14,10 +14,10 @@ class AddPhotosService
     images = params['animal']['photos'].select(&:present?)
     return if images.blank?
 
-    s3 = S3.new
+    photo_bucket = S3.new(PHOTO_BUCKET)
 
     images.each do |image|
-      add_image_to_animal(image, s3)
+      add_image_to_animal(image, photo_bucket)
     end
 
     @animal.save
@@ -29,9 +29,8 @@ class AddPhotosService
     @animal.name || animal_params[:name] || ''
   end
 
-  def add_image_to_animal(image, s3_bucket)
-    upload_results = s3_bucket.put_object(
-      bucket: PHOTO_BUCKET,
+  def add_image_to_animal(image, photo_bucket)
+    upload_results = photo_bucket.put_object(
       key: "photo-#{Time.zone.today}-#{animal_name}-#{SecureRandom.hex(2)}",
       body: image.tempfile
     )
