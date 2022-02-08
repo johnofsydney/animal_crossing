@@ -1,11 +1,9 @@
 require 'aws/s3'
-# require 'aws/S4'
+
 class AnimalsController < ApplicationController
   before_action :set_animal, only: %i[show edit update destroy]
 
   # rubocop:disable Metrics/AbcSize
-  # rubocop:disable Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
   # GET /animals or /animals.json
   def index
     @animals = Animal.all
@@ -42,27 +40,29 @@ class AnimalsController < ApplicationController
     # - make a plural version: put_objects
 
     # TODO: - safe params for nested photo attributes
-    images = params['animal']['photos'].select(&:present?)
+    AddPhotosService.new(@animal, params).process
 
-    if images.present?
-      s3 = S3.new
+    # images = params['animal']['photos'].select(&:present?)
 
-      images.each do |image|
-        file = image.tempfile
-        key = "photo-#{Time.zone.today}-#{animal_name}-#{SecureRandom.hex(2)}"
+    # if images.present?
+    #   s3 = S3.new
 
-        upload = s3.put_object(
-          bucket: photo_bucket,
-          key: key,
-          body: file
-        )
+    #   images.each do |image|
+    #     file = image.tempfile
+    #     key = "photo-#{Time.zone.today}-#{animal_name}-#{SecureRandom.hex(2)}"
 
-        photo = Photo.new(address: upload[:address])
-        @animal.photos << photo
-      end
+    #     upload = s3.put_object(
+    #       bucket: photo_bucket,
+    #       key: key,
+    #       body: file
+    #     )
 
-      @animal.save
-    end
+    #     photo = Photo.new(address: upload[:address])
+    #     @animal.photos << photo
+    #   end
+
+    #   @animal.save
+    # end
 
     # TODO: - safe params for nested breed attributes
     breed_ids = params[:breeds][:ids].select(&:present?).map(&:to_i)
@@ -148,14 +148,12 @@ class AnimalsController < ApplicationController
     params.permit(:size, :name)
   end
 
-  def animal_name
-    @animal.name || animal_params[:name] || ''
-  end
+  # def animal_name
+  #   @animal.name || animal_params[:name] || ''
+  # end
 
   def photo_bucket
     'doolittle-a1'
   end
   # rubocop:enable Metrics/AbcSize
-  # rubocop:enable Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/PerceivedComplexity
 end

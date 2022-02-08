@@ -11,7 +11,6 @@ class S3
     )
   end
 
-  # rubocop:disable Metrics/MethodLength
   def put_object(bucket:, key:, body:)
     client.put_object(bucket: bucket, key: key, body: body)
 
@@ -50,5 +49,4 @@ class S3
   rescue NoMethodError => e
     e.inspect # fix for CI
   end
-  # rubocop:enable Metrics/MethodLength
 end
