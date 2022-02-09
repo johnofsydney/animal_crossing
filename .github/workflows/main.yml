@@ -6,8 +6,6 @@
 # run tests and linters.
 name: "PR to main"
 on:
-  # push:
-  #   branches: [ main ] # runs when main is pushed
   pull_request:
     branches: [ main ] # runs when a PR is opened to main
 jobs:

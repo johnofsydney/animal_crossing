@@ -6,8 +6,6 @@
 # run tests and linters.
 name: "PR to develop"
 on:
-  # push:
-  #   branches: [ develop ] # runs when develop is pushed
   pull_request:
     branches: [ develop ] # runs when a PR is opened to develop
 jobs:
