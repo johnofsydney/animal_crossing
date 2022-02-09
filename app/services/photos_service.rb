@@ -9,7 +9,7 @@ class PhotosService
     @photo_bucket = S3.new(S3::PHOTO_BUCKET)
   end
 
-  # adds several photo files to S3, and records to DB
+  # adds several photo files to S3, and inserts records to DB
   def add_photos
     images = params['animal']['photos'].select(&:present?)
     return if images.blank?

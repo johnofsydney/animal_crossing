@@ -38,7 +38,7 @@ class AnimalsController < ApplicationController
     # TODO: - safe params for nested photo attributes
     # TODO: - safe params for nested breed attributes
     PhotosService.new(@animal, params).add_photos
-    WriteBreedsService.new(@animal, params).process
+    BreedsService.new(@animal, params).save_breeds
 
     # fields on the animal object updated in the standard way
     if @animal.update(animal_params)
@@ -50,7 +50,6 @@ class AnimalsController < ApplicationController
 
   # DELETE /animals/1 or /animals/1.json
   def destroy
-    # Delete all of the associated photos from S3
     PhotosService.new(@animal).delete_photos
 
     @animal.destroy
@@ -60,7 +59,7 @@ class AnimalsController < ApplicationController
   def delete_photo
     animal_id = params[:animal_id].to_i
     @animal = Animal.find(animal_id)
-    # Delete the photos from S3 _and_ destroy the records from the DB
+
     PhotosService.new(@animal, params).delete_photo
 
     # redirect_to @animal
@@ -68,14 +67,7 @@ class AnimalsController < ApplicationController
   end
 
   def search
-    @animals = Animal.all
-    return @animals if search_params.values.all?(&:empty?)
-
-    size = search_params[:size]
-    name = search_params[:name]
-
-    @animals = @animals.where(size: size) if size.present?
-    @animals = @animals.where('name ILIKE :name OR description ILIKE :name', name: "%#{name}%") if name.present?
+    @animals = SearchService.new(search_params).results
   end
 
   private
