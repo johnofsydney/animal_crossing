@@ -6,10 +6,10 @@
 # run tests and linters.
 name: "PR to main"
 on:
-  push:
-    branches: [ main ] # runs when develop is pushed
+  # push:
+  #   branches: [ main ] # runs when main is pushed
   pull_request:
-    branches: [ main ] # runs when a PR is opened to develop
+    branches: [ main ] # runs when a PR is opened to main
 jobs:
   test:
     runs-on: ubuntu-latest
