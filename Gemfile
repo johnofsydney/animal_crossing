@@ -75,3 +75,4 @@ end
 gem 'rails_12factor', group: :production
 
 gem 'aws-sdk-s3', '~> 1'
+gem 'bundler-audit'
