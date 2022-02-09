@@ -4,7 +4,7 @@ require 'aws/s3'
 RSpec.describe S3 do
   describe '#put_object' do
     subject(:put_object) do
-      described_class.new.put_object(bucket: bucket, key: key, body: body)
+      described_class.new(bucket).put_object(key: key, body: body)
     end
 
     before do
@@ -30,7 +30,7 @@ RSpec.describe S3 do
 
   describe '#delete_object' do
     subject(:delete_object) do
-      described_class.new.delete_object(bucket: bucket, key: key)
+      described_class.new(bucket).delete_object(key: key)
     end
 
     before do

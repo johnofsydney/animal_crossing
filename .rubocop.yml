@@ -42,7 +42,8 @@ Metrics/ParameterLists:
 
 Metrics/MethodLength:
   Description: 'Avoid methods longer than 5 lines of code.'
-  Max: 5
+  Max: 10
+  CountAsOne: ['array', 'heredoc']
   Enabled: true
   Exclude:
     - 'app/controllers/**/*'

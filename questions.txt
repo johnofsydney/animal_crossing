@@ -1,0 +1,6 @@
+- best place for RAILS_MASTER_KEY?
+  - deployment works fine when the value is set in heroku
+
+- Can we have nested params for photos in the animnal controller?
+  - I think maybe not, because the file attributes are not the same as the model attributes
+- Can we have nested params for breeds in the animal controller?
