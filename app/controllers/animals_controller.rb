@@ -83,6 +83,6 @@ class AnimalsController < ApplicationController
   end
 
   def search_params
-    params.permit(:size, :name, :sex)
+    params.permit(:size, :name, :sex, :age_group)
   end
 end

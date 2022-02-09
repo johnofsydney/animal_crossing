@@ -17,6 +17,13 @@ RSpec.describe Animal, type: :model do
   let(:photo_link_one) { 'url to photo one' }
   let(:photo_link_two) { 'url to photo two' }
 
-  it { expect(animal.reload.name).to eq(name) }
-  it { expect(animal.reload.dob).to eq(dob) }
+  it { expect(animal.name).to eq(name) }
+  it { expect(animal.dob).to eq(dob) }
+
+  context 'when the animal is a puppy' do
+    let(:dob) { Date.today - 21 }
+
+    it { expect(animal.age).to eq('3 weeks') }
+    it { expect(animal.age_group).to eq('puppy') }
+  end
 end

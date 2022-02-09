@@ -7,4 +7,19 @@ class Animal < ApplicationRecord
 
   accepts_nested_attributes_for :photos
   accepts_nested_attributes_for :breeds
+
+  def self.age_groups
+    {
+      puppy:  180,
+      adult:  10000
+    }
+  end
+
+  # make an age_group method
+
+  def age
+    days_old = (Date.today - self.dob).to_i
+
+  "#{(days_old / 7)} weeks"
+  end
 end

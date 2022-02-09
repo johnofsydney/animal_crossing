@@ -10,6 +10,7 @@
 
     <%= form.select :size, Animal.sizes, { include_blank: true } %>
     <%= form.select :sex, Animal.sexes, { include_blank: true } %>
+    <%= form.select :age_group, Animal.age_groups.keys, { include_blank: true } %>
 
     <%= form.submit "Search" %>
   <% end %>
@@ -20,6 +21,7 @@
 
 <div id="animals">
   <% if @animals.present? %>
+    <%= @animals.count %> animals found in search
     <% @animals.each do |animal| %>
       <%= render animal %>
       <p>
