@@ -34,6 +34,10 @@ def size
   %w[small medium large].sample
 end
 
+def sex
+  %w[male female].sample
+end
+
 def address
   [
     'https://placedog.net/600',
@@ -70,6 +74,7 @@ end
     name: name,
     dob: dob,
     size: size,
+    sex: sex,
     photos: photos,
     breeds: breeds
   )

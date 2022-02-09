@@ -63,3 +63,5 @@ class PhotosService
     animal.photos << Photo.new(address: upload_results[:address])
   end
 end
+
+# TODO: write a test for this class
