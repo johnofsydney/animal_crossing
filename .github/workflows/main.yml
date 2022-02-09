@@ -55,3 +55,14 @@ jobs:
       - name: Lint Ruby files
         # run: bin/rubocop --parallel
         run: bundle exec rubocop
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@8f312efe1262fb463d906e9bf040319394c18d3e # v1.92
+        with:
+          bundler-cache: true
+      - name: Run Bundle Audit
+        run: bundle exec bundle-audit --update

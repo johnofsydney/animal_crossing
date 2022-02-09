@@ -1,7 +1,16 @@
 class S3
-  REGION = 'us-east-1'.freeze
+  # TODO: S3 refactors
+  # - permissions for S3 bucket are too lax
+  # - make a plural version: put_objects
 
-  def initialize; end
+  REGION = 'us-east-1'.freeze
+  PHOTO_BUCKET = 'doolittle-a1'.freeze
+
+  attr_reader :bucket
+
+  def initialize(bucket)
+    @bucket = bucket
+  end
 
   def client
     @client ||= Aws::S3::Client.new(
@@ -11,8 +20,7 @@ class S3
     )
   end
 
-  # rubocop:disable Metrics/MethodLength
-  def put_object(bucket:, key:, body:)
+  def put_object(key:, body:)
     client.put_object(bucket: bucket, key: key, body: body)
 
     # TODO: handle error in saving
@@ -24,7 +32,7 @@ class S3
     }
   end
 
-  def delete_object(bucket:, key:)
+  def delete_object(key:)
     # TODO: setup logger
     # logger.debug "Deleting #{key} from #{bucket}. INFO"
     # logger.info "Deleting #{key} from #{bucket}. DEBUG"
@@ -50,5 +58,4 @@ class S3
   rescue NoMethodError => e
     e.inspect # fix for CI
   end
-  # rubocop:enable Metrics/MethodLength
 end

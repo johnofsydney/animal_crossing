@@ -1,11 +1,8 @@
 require 'aws/s3'
-# require 'aws/S4'
+
 class AnimalsController < ApplicationController
   before_action :set_animal, only: %i[show edit update destroy]
 
-  # rubocop:disable Metrics/AbcSize
-  # rubocop:disable Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
   # GET /animals or /animals.json
   def index
     @animals = Animal.all
@@ -37,41 +34,13 @@ class AnimalsController < ApplicationController
 
   # PATCH/PUT /animals/1 or /animals/1.json
   def update
-    # TODO: S3 refactors
-    # - permissions for S3 bucket are too lax
-    # - make a plural version: put_objects
-
+    # send the animal object and params to update services for photos and breeds
     # TODO: - safe params for nested photo attributes
-    images = params['animal']['photos'].select(&:present?)
-
-    if images.present?
-      s3 = S3.new
-
-      images.each do |image|
-        file = image.tempfile
-        key = "photo-#{Time.zone.today}-#{animal_name}-#{SecureRandom.hex(2)}"
-
-        upload = s3.put_object(
-          bucket: photo_bucket,
-          key: key,
-          body: file
-        )
-
-        photo = Photo.new(address: upload[:address])
-        @animal.photos << photo
-      end
-
-      @animal.save
-    end
-
     # TODO: - safe params for nested breed attributes
-    breed_ids = params[:breeds][:ids].select(&:present?).map(&:to_i)
-    if breed_ids.present?
-      breeds = breed_ids.map { |id| Breed.find(id) }
-      @animal.breeds = breeds
-      @animal.save
-    end
+    PhotosService.new(@animal, params).add_photos
+    BreedsService.new(@animal, params).save_breeds
 
+    # fields on the animal object updated in the standard way
     if @animal.update(animal_params)
       redirect_to animal_url(@animal), notice: 'Animal was successfully updated.'
     else
@@ -81,55 +50,24 @@ class AnimalsController < ApplicationController
 
   # DELETE /animals/1 or /animals/1.json
   def destroy
-    # TODO: make a plural version: delete_objects
-
-    s3 = S3.new
-    @animal.photos.each do |photo|
-      key = photo.address.split('/').last
-
-      s3.delete_object(
-        bucket: photo_bucket,
-        key: key
-      )
-    end
+    PhotosService.new(@animal).delete_photos
 
     @animal.destroy
     redirect_to animals_url, notice: 'Animal was successfully destroyed.'
   end
 
   def delete_photo
-    s3 = S3.new
-
     animal_id = params[:animal_id].to_i
-    photo_id = params[:photo_id].to_i
-
     @animal = Animal.find(animal_id)
-    photo = Photo.find(photo_id)
 
-    # 1 delete object from bucket
-    key = photo.address.split('/').last
-
-    s3.delete_object(
-      bucket: photo_bucket,
-      key: key
-    )
-
-    # 2 destroy rails record
-    @animal.photos.destroy(photo)
+    PhotosService.new(@animal, params).delete_photo
 
     # redirect_to @animal
     redirect_to edit_animal_path(@animal)
   end
 
   def search
-    @animals = Animal.all
-    return @animals if safe_params.values.all?(&:empty?)
-
-    size = safe_params[:size]
-    name = safe_params[:name]
-
-    @animals = @animals.where(size: size) if size.present?
-    @animals = @animals.where('name ILIKE :name OR description ILIKE :name', name: "%#{name}%") if name.present?
+    @animals = SearchService.new(search_params).results
   end
 
   private
@@ -144,18 +82,7 @@ class AnimalsController < ApplicationController
     params.require(:animal).permit(:name, :dob, :description, :size)
   end
 
-  def safe_params
+  def search_params
     params.permit(:size, :name)
   end
-
-  def animal_name
-    @animal.name || animal_params[:name] || ''
-  end
-
-  def photo_bucket
-    'doolittle-a1'
-  end
-  # rubocop:enable Metrics/AbcSize
-  # rubocop:enable Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/PerceivedComplexity
 end
