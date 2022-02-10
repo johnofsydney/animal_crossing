@@ -10,7 +10,7 @@
 
     <%= form.select :size, Animal.sizes, { include_blank: true } %>
     <%= form.select :sex, Animal.sexes, { include_blank: true } %>
-    <%= form.select :age_group, Animal.age_groups.keys, { include_blank: true } %>
+    <%= form.select :age_group, Animal::AGE_GROUPS.keys, { include_blank: true } %>
 
     <%= form.submit "Search" %>
   <% end %>

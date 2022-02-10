@@ -24,9 +24,10 @@ end
 
 def dob
   [
-    Date.new(2020, 6, 30),
-    Date.new(2019, 9, 30),
-    Date.new(2018, 3, 30),
+    Time.zone.today - 30, # puppy
+    Time.zone.today - 300, # adolescent
+    Time.zone.today - 3000, # adult
+    Time.zone.today - 30000, # old
   ].sample
 end
 

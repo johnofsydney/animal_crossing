@@ -1,4 +1,11 @@
 class Animal < ApplicationRecord
+  AGE_GROUPS = {
+    puppy: 180,
+    adolescent: 780,
+    adult: 3650,
+    old: 7800
+  }.freeze
+
   enum size: { small: 'small', medium: 'medium', large: 'large' }
   enum sex: { male: 'male', female: 'female' }
 
@@ -8,18 +15,26 @@ class Animal < ApplicationRecord
   accepts_nested_attributes_for :photos
   accepts_nested_attributes_for :breeds
 
-  def self.age_groups
-    {
-      puppy:  180,
-      adult:  10000
-    }
-  end
-
-  # make an age_group method
+  # TODO: use scopes for age groups. mabybe
 
   def age
-    days_old = (Date.today - self.dob).to_i
+    return "#{days_old / 7} weeks" if days_old < 180
+    return "#{days_old / 30} months" if days_old < 780
 
-  "#{(days_old / 7)} weeks"
+    "#{days_old / 365} years"
+  end
+
+  def age_group
+    return 'puppy' if days_old < AGE_GROUPS[:puppy]
+    return 'adolescent' if days_old < AGE_GROUPS[:adolescent]
+    return 'adult' if days_old < AGE_GROUPS[:adult]
+
+    'old'
+  end
+
+  private
+
+  def days_old
+    @days_old ||= (Time.zone.today - self.dob).to_i
   end
 end
