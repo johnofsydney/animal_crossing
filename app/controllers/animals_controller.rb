@@ -83,6 +83,17 @@ class AnimalsController < ApplicationController
   end
 
   def search_params
-    params.permit(:size, :name, :sex, :age_group)
+    params.permit(
+      :size,
+      :name,
+      :sex,
+      :age_group,
+      :good_with_small_children,
+      :good_with_older_children,
+      :good_with_other_dogs,
+      :good_with_cats,
+      :can_be_left_alone_during_working_hours,
+      :apartment_friendly
+    )
   end
 end

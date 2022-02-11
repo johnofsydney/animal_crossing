@@ -56,6 +56,10 @@ def random_number
   (1..3).to_a.sample
 end
 
+def random_boolean
+  [true, false].sample
+end
+
 def photos
   (1..random_number)
     .to_a
@@ -77,6 +81,12 @@ end
     size: size,
     sex: sex,
     photos: photos,
-    breeds: breeds
+    breeds: breeds,
+    good_with_small_children: random_boolean,
+    good_with_older_children: random_boolean,
+    good_with_other_dogs: random_boolean,
+    good_with_cats: random_boolean,
+    can_be_left_alone_during_working_hours: random_boolean,
+    apartment_friendly: random_boolean
   )
 end

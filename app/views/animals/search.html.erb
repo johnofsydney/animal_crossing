@@ -12,6 +12,22 @@
     <%= form.select :sex, Animal.sexes, { include_blank: true } %>
     <%= form.select :age_group, Animal::AGE_GROUPS.keys, { include_blank: true } %>
 
+    <%= form.check_box :good_with_small_children %>
+    <%= form.label :good_with_small_children, "Good with small cbildren" %>
+    <%= form.check_box :good_with_older_children %>
+    <%= form.label :good_with_older_children, "Good with older cbildren" %>
+
+    <%= form.check_box :good_with_other_dogs %>
+    <%= form.label :good_with_other_dogs, "Good with other dogs" %>
+    <%= form.check_box :good_with_cats %>
+    <%= form.label :good_with_cats, "Good with cats and pocket pets" %>
+
+    <%= form.check_box :can_be_left_alone_during_working_hours %>
+    <%= form.label :can_be_left_alone_during_working_hours, "Can be left alone during working hours" %>
+    <%= form.check_box :apartment_friendly %>
+    <%= form.label :apartment_friendly, "Apartment friendly" %>
+
+
     <%= form.submit "Search" %>
   <% end %>
 
