@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_11_090510) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_02_11_090510) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,8 +18,8 @@ ActiveRecord::Schema.define(version: 2022_02_11_090510) do
     t.string "name"
     t.date "dob"
     t.string "description"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "size"
     t.string "sex"
     t.boolean "good_with_small_children"
@@ -42,15 +41,15 @@ ActiveRecord::Schema.define(version: 2022_02_11_090510) do
 
   create_table "breeds", force: :cascade do |t|
     t.string "breed"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "photos", force: :cascade do |t|
     t.string "address"
     t.bigint "animal_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["animal_id"], name: "index_photos_on_animal_id"
   end
 
