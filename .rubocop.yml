@@ -19,34 +19,8 @@ AllCops:
     - 'spec/rails_helper.rb'
     - 'config/**/*'
 
-
 Layout/LineLength:
   Max: 200
-
-# Metrics Cops
-
-Metrics/ClassLength:
-  Description: 'Avoid classes longer than 100 lines of code.'
-  Max: 100
-  Enabled: true
-
-Metrics/ModuleLength:
-  Description: 'Avoid modules longer than 100 lines of code.'
-  Max: 100
-  Enabled: true
-
-Metrics/ParameterLists:
-  Description: 'Pass no more than four parameters into a method.'
-  Max: 4
-  Enabled: true
-
-Metrics/MethodLength:
-  Description: 'Avoid methods longer than 5 lines of code.'
-  Max: 10
-  CountAsOne: ['array', 'heredoc']
-  Enabled: true
-  Exclude:
-    - 'app/controllers/**/*'
 
 Metrics/BlockLength:
   CountComments: false
@@ -59,6 +33,32 @@ Metrics/BlockLength:
     - 'Gemfile'
     - 'spec/**/*'
     - 'app/controllers/**/*'
+
+Metrics/ClassLength:
+  Description: 'Avoid classes longer than 100 lines of code.'
+  Max: 100
+  Enabled: true
+
+Metrics/MethodLength:
+  Description: 'Avoid methods longer than 5 lines of code.'
+  Max: 10
+  CountAsOne: ['array', 'heredoc']
+  Enabled: true
+  Exclude:
+    - 'app/controllers/**/*'
+
+Metrics/ModuleLength:
+  Description: 'Avoid modules longer than 100 lines of code.'
+  Max: 100
+  Enabled: true
+
+Metrics/ParameterLists:
+  Description: 'Pass no more than four parameters into a method.'
+  Max: 4
+  Enabled: true
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 9 # number of let variables available to an example group
 
 Style/BlockComments:
   Enabled: false
@@ -74,7 +74,3 @@ Style/Documentation:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
-
-
-RSpec/MultipleMemoizedHelpers:
-  Max: 9 # number of let variables available to an example group
