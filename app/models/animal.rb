@@ -15,6 +15,8 @@ class Animal < ApplicationRecord
   accepts_nested_attributes_for :photos
   accepts_nested_attributes_for :breeds
 
+  scope :adopted, -> { where.not(adopted_date: nil) }
+  scope :not_adopted, -> { where(adopted_date: nil) }
   # TODO: use scopes for age groups. mabybe
 
   def age

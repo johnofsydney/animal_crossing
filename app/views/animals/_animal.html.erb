@@ -34,4 +34,24 @@
     <%= animal.breeds.map{ |b| b.breed }.join(", ") %>
   </p>
 
+  <div>
+    <h2>Adoption Details</h2>
+
+      <p>
+        <strong>Adopted by:</strong>
+        <%= animal.adopted_by_name %>
+      </p>
+      <p>
+        <strong>email:</strong>
+        <%= animal.adopted_by_email %>
+      </p>
+      <p>
+        <strong>phone:</strong>
+        <%= animal.adopted_by_phone %>
+      </p>
+      <p>
+        <strong>date:</strong>
+        <%= animal.adopted_date %>
+      </p>
+  </div>
 </div>

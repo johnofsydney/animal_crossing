@@ -10,7 +10,7 @@ class SearchService
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/PerceivedComplexity
   def results
-    @animals = Animal.all
+    @animals = Animal.not_adopted
     return @animals if search_params.values.all?(&:empty?)
 
     @animals = @animals.where(size: size) if size.present?
