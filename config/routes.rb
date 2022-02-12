@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :species
   resources :breeds
 
   # to delete a single phot belonging to an animal

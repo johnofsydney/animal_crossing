@@ -18,6 +18,9 @@ AllCops:
     - 'spec/spec_helper.rb'
     - 'spec/rails_helper.rb'
     - 'config/**/*'
+    - 'spec/views/**/*' # temporarily
+    - 'spec/routing/**/*' # temporarily
+    - 'spec/requests/**/*' # temporarily
 
 Layout/LineLength:
   Max: 200
