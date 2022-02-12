@@ -6,7 +6,7 @@ class SearchService
   end
 
   def results
-    @animals = Animal.all
+    @animals = Animal.not_adopted
     return @animals if search_params.values.all?(&:empty?)
 
     size = search_params[:size]

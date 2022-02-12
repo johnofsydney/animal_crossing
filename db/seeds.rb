@@ -74,3 +74,17 @@ end
     breeds: breeds
   )
 end
+
+40.times do
+  Animal.create(
+    name: name,
+    dob: dob,
+    size: size,
+    photos: photos,
+    breeds: breeds,
+    adopted_by_name: Faker::Name.name,
+    adopted_by_email: Faker::Internet.email,
+    adopted_by_phone: Faker::PhoneNumber.cell_phone_with_country_code,
+    adopted_date: Faker::Date.between(from: 2.years.ago, to: 2.days.ago)
+  )
+end
