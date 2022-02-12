@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_15_090403) do
+ActiveRecord::Schema.define(version: 2022_02_11_082255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,13 @@ ActiveRecord::Schema.define(version: 2022_01_15_090403) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "size"
+    t.string "sex"
+    t.boolean "good_with_small_children"
+    t.boolean "good_with_older_children"
+    t.boolean "good_with_other_dogs"
+    t.boolean "good_with_cats"
+    t.boolean "can_be_left_alone_during_working_hours"
+    t.boolean "apartment_friendly"
   end
 
   create_table "animals_breeds", id: false, force: :cascade do |t|

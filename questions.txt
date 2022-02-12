@@ -4,3 +4,6 @@
 - Can we have nested params for photos in the animnal controller?
   - I think maybe not, because the file attributes are not the same as the model attributes
 - Can we have nested params for breeds in the animal controller?
+
+
+- Production Migration as part of CI

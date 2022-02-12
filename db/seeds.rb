@@ -24,14 +24,19 @@ end
 
 def dob
   [
-    Date.new(2020, 6, 30),
-    Date.new(2019, 9, 30),
-    Date.new(2018, 3, 30),
+    Time.zone.today - 30, # puppy
+    Time.zone.today - 300, # adolescent
+    Time.zone.today - 3000, # adult
+    Time.zone.today - 30000, # old
   ].sample
 end
 
 def size
   %w[small medium large].sample
+end
+
+def sex
+  %w[male female].sample
 end
 
 def address
@@ -49,6 +54,10 @@ end
 
 def random_number
   (1..3).to_a.sample
+end
+
+def random_boolean
+  [true, false].sample
 end
 
 def photos
@@ -70,7 +79,14 @@ end
     name: name,
     dob: dob,
     size: size,
+    sex: sex,
     photos: photos,
-    breeds: breeds
+    breeds: breeds,
+    good_with_small_children: random_boolean,
+    good_with_older_children: random_boolean,
+    good_with_other_dogs: random_boolean,
+    good_with_cats: random_boolean,
+    can_be_left_alone_during_working_hours: random_boolean,
+    apartment_friendly: random_boolean
   )
 end
