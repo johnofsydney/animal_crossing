@@ -87,6 +87,7 @@ class AnimalsController < ApplicationController
       :size,
       :name,
       :sex,
+      :species,
       :age_group,
       :good_with_small_children,
       :good_with_older_children,

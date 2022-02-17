@@ -4,12 +4,17 @@
   <h2>Search</h2>
 
   <%= form_with url: "/animals/search", method: :get do |form| %>
-    <%= form.label :query, "Search for name:" %>
-    <%= form.text_field :name %>
-    <%= form.label :size, "Search for size:" %>
 
+    <%= form.label :name, "Search for name:" %>
+    <%= form.text_field :name %>
+
+    <%= form.label :size, "size:" %>
     <%= form.select :size, Animal.sizes, { include_blank: true } %>
+    <%= form.label :sex, "sex:" %>
     <%= form.select :sex, Animal.sexes, { include_blank: true } %>
+    <%= form.label :species, "species:" %>
+    <%= form.select :species, Animal.species, { include_blank: true } %>
+    <%= form.label :age_group, "age group:" %>
     <%= form.select :age_group, Animal::AGE_GROUPS.keys, { include_blank: true } %>
 
     <%= form.check_box :good_with_small_children %>
