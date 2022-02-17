@@ -39,6 +39,10 @@ def sex
   %w[male female].sample
 end
 
+def species
+  %w[dog cat other].sample
+end
+
 def address
   [
     'https://placedog.net/600',
@@ -80,6 +84,7 @@ end
     dob: dob,
     size: size,
     sex: sex,
+    species: species,
     photos: photos,
     breeds: breeds,
     good_with_small_children: random_boolean,
@@ -96,6 +101,8 @@ end
     name: name,
     dob: dob,
     size: size,
+    sex: sex,
+    species: species,
     photos: photos,
     breeds: breeds,
     adopted_by_name: Faker::Name.name,

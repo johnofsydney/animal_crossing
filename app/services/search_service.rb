@@ -15,6 +15,7 @@ class SearchService
 
     @animals = @animals.where(size: size) if size.present?
     @animals = @animals.where(sex: sex) if sex.present?
+    @animals = @animals.where(species: species) if species.present?
     @animals = @animals.select { |a| a.age_group == age_group } if age_group.present?
     @animals = @animals.where('name ILIKE :name OR description ILIKE :name', name: "%#{name}%") if name.present?
 
@@ -40,6 +41,10 @@ class SearchService
 
   def sex
     @sex ||= search_params[:sex]
+  end
+
+  def species
+    @species ||= search_params[:species]
   end
 
   def age_group
@@ -75,6 +80,7 @@ class SearchService
   end
 
   def to_bool(value)
+    # check boxes on a form are "1" or "0"
     return true if value.to_i == 1
     return false if value.to_i.zero?
   end
