@@ -205,6 +205,21 @@ RSpec.describe AnimalsController, type: :controller do
       end
     end
 
+    context 'when one of the params is not present' do
+      let(:params) do
+        {
+          size: 'small',
+          name: ''
+        }
+      end
+
+      it 'assigns the records' do
+        get :search, params: params
+
+        expect(assigns(:animals)).to eq([animal_one, animal_two])
+      end
+    end
+
     context 'when the params are not present' do
       let(:params) { {} }
 
