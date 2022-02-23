@@ -31,6 +31,11 @@
     <%= form.select :size, ["small", "medium", "large"] %>
   </div>
 
+    <div class="field">
+    <%= form.label :sex %>
+    <%= form.select :sex, ["male", "female"] %>
+  </div>
+
   <div class="field">
     <%= form.label :breed_ids %>
     <%= collection_select(
