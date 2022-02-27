@@ -1,0 +1,64 @@
+<div id="<%= dom_id animal_index_card %>">
+  <p>
+    <strong>Name:</strong>
+    <%= animal.name %>
+  </p>
+
+  <p>
+    <strong>Dob:</strong>
+    <%= animal.dob %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= animal.description %>
+  </p>
+
+  <p>
+    <strong>Size:</strong>
+    <%= animal.size %>
+  </p>
+
+  <p>
+    <strong>Sex:</strong>
+    <%= animal.sex %>
+  </p>
+
+  <p>
+    <strong>Species:</strong>
+    <%= animal.species %>
+  </p>
+
+  <p>
+    <strong>Age:</strong>
+    <%= animal.age %>
+  </p>
+
+  <p>
+    <strong>Breeds:</strong>
+    <%= animal.breeds.map{ |b| b.breed }.join(", ") %>
+  </p>
+
+  <% if @is_user %> <!-- Logged in users can see adoption details -->
+  <div>
+    <h2>Adoption Details</h2>
+
+      <p>
+        <strong>Adopted by:</strong>
+        <%= animal.adopted_by_name %>
+      </p>
+      <p>
+        <strong>email:</strong>
+        <%= animal.adopted_by_email %>
+      </p>
+      <p>
+        <strong>phone:</strong>
+        <%= animal.adopted_by_phone %>
+      </p>
+      <p>
+        <strong>date:</strong>
+        <%= animal.adopted_date %>
+      </p>
+  </div>
+  <% end %>
+</div>

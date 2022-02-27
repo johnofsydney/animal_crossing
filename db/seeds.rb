@@ -78,9 +78,20 @@ def breeds
   Breed.all.shuffle.take(random_number)
 end
 
+def description
+  [
+    "Loves walks, bones and children.",
+    "Needs fences of more than 3m. Can jump and catch birds flying past.",
+    "Was submitted to foster care by a tearful widow, after killing and eating her husband.",
+    "Was submitted to foster care by a grateful widow, after killing and eating her husband.",
+    "Will sleep all day. Probably won't notice you."
+  ].shuffle.take(1)
+end
+
 20.times do
   Animal.create(
     name: name,
+    description: description,
     dob: dob,
     size: size,
     sex: sex,
@@ -99,6 +110,7 @@ end
 40.times do
   Animal.create(
     name: name,
+    description: description,
     dob: dob,
     size: size,
     sex: sex,

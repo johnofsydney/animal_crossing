@@ -1,6 +1,41 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @animal %>
+  <h2><%= @animal.name %></h2>
+
+  <p>
+    <%= @animal.description %>
+  </p>
+
+  <table class="table">
+    <tbody>
+      <tr>
+        <td><strong>Size</strong></td>
+        <td><%= @animal.size.capitalize %></td>
+      </tr>
+      <tr>
+        <td><strong>Sex:</strong></td>
+        <td><%= @animal.sex.capitalize %></td>
+      </tr>
+      <tr>
+        <td><strong>Species:</strong></td>
+        <td><%= @animal.species.capitalize %></td>
+      </tr>
+      <tr>
+        <td><strong>Age:</strong></td>
+        <td><%= @animal.age %></td>
+      </tr>
+      <tr>
+        <td><strong>Breed(s):</strong></td>
+        <td><%= @animal.breeds_summary %></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <% if @is_user %> <!-- Logged in users can see adoption details -->
+    <%= render "adoption_details", animal: @animal%>
+  <% end %>
+
 
     <div id="photos">
       <% @animal.photos.each do |photo| %>
