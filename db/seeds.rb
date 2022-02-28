@@ -19,16 +19,15 @@ Photo.destroy_all
 Animal.destroy_all
 
 def name
-  %w[Ruby Rex Nala Atlas Rolf Schnitzel Fido Maggie].sample
+  Faker::Name.first_name
 end
 
 def dob
-  [
-    Time.zone.today - 30, # puppy
-    Time.zone.today - 300, # adolescent
-    Time.zone.today - 3000, # adult
-    Time.zone.today - 30000, # old
-  ].sample
+  Faker::Date.birthday(max_age: 14)
+end
+
+def description
+  Faker::Lorem.paragraph
 end
 
 def size
@@ -82,6 +81,7 @@ end
   Animal.create(
     name: name,
     dob: dob,
+    description: description,
     size: size,
     sex: sex,
     species: species,
