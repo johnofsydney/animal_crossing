@@ -1,8 +1,11 @@
 <div id="<%= dom_id animal %>" class="card">
   <%= link_to image_tag(animal.photos.first.address, class: "card-img-top"), animal %>
   <div class="card-body">
-    <h5 class="card-title"><%= animal.name %></h5>
+    <div class="d-grid gap-2">
+      <%= link_to animal.name, animal, class: "btn btn-primary" %>
+    </div>
+
     <p class="card-text"><%= animal.summary %></p>
-    <%= link_to animal.name, animal, class: "btn btn-primary" %>
+
   </div>
 </div>
