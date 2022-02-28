@@ -11,33 +11,33 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-3">
+    <%= form.label :name, class: "form-label" %>
+    <%= form.text_field :name, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :dob, style: "display: block" %>
-    <%= form.date_field :dob %>
+  <div class="mb-3">
+    <%= form.label :dob, class: "form-label" %>
+    <%= form.date_field :dob, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_field :description %>
+  <div class="mb-3">
+    <%= form.label :description, class: "form-label" %>
+    <%= form.text_field :description, class: "form-control" %>
   </div>
 
-    <div class="field">
-    <%= form.label :size %>
-    <%= form.select :size, ["small", "medium", "large"] %>
+  <div class="mb-3">
+    <%= form.label :size, class: "form-label" %>
+    <%= form.select :size, ["small", "medium", "large"], {}, { class: 'form-control' } %>
   </div>
 
-    <div class="field">
+  <div class="mb-3">
     <%= form.label :sex %>
-    <%= form.select :sex, ["male", "female"] %>
+    <%= form.select :sex, ["male", "female"], {}, { class: 'form-control' } %>
   </div>
 
-  <div class="field">
-    <%= form.label :breed_ids %>
+  <div class="mb-3">
+    <%= form.label :breed_ids, class: "form-label" %>
     <%= collection_select(
       # https://stackoverflow.com/questions/8907867/can-someone-explain-collection-select-to-me-in-clear-simple-terms
 
@@ -52,8 +52,8 @@
 
       :id, # this is name of method that will be called for every row, result will be set as key
       :breed, # this is name of method that will be called for every row, result will be set as value
-      { :selected => animal.breeds.map(&:id), :include_blank => "Please select on or moe breeds" }, # hash of options
-      { :multiple => true } # html options
+      { :selected => animal.breeds.map(&:id), :include_blank => "Please select on or more breeds" }, # hash of options
+      { :multiple => true, class: "form-control" } # html options
       )%>
   </div>
 

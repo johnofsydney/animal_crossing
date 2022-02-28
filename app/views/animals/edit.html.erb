@@ -7,4 +7,7 @@
 <div>
   <%= link_to "Show this animal", @animal %> |
   <%= link_to "Back to animals", animals_path %>
+  <%= button_to "Destroy this animal", @animal, method: :delete %>
+
+  # TODO: add confirm to destroy
 </div>
