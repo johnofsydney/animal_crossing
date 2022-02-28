@@ -17,7 +17,7 @@ class Animal < ApplicationRecord
   accepts_nested_attributes_for :photos
   accepts_nested_attributes_for :breeds
 
-  validates :name, presence: { message: 'Animal name is required' }
+  validates :name, presence: true
 
   scope :adopted, -> { where.not(adopted_date: nil) }
   scope :not_adopted, -> { where(adopted_date: nil) }
