@@ -75,4 +75,3 @@ gem 'simplecov', require: false, group: :test
 group :test do
   gem 'shoulda-matchers'
 end
-

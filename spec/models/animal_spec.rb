@@ -2,13 +2,18 @@ require 'rails_helper'
 
 RSpec.describe Animal, type: :model do
   subject(:animal) do
-    FactoryBot.build(
+    build(
       :animal,
-      dob: dob
+      dob: dob,
+      photos: [photo]
     )
   end
 
   let(:dob) { Date.new(2022, 1, 20) }
+  let(:photo) { create(:photo) }
+
+  it { is_expected.to validate_presence_of(:name) }
+  it { is_expected.to have_many(:photos) }
 
   describe '#age and #age_group' do
     context 'when the animal is a puppy' do
