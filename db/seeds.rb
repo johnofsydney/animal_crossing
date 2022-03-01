@@ -23,7 +23,11 @@ def name
 end
 
 def dob
-  Faker::Date.birthday(max_age: 14)
+  [
+    Faker::Date.between(from: 200.days.ago, to: 14.days.ago),
+    Faker::Date.between(from: 36.months.ago, to: 6.months.ago),
+    Faker::Date.between(from: 15.years.ago, to: 2.years.ago)
+  ].sample
 end
 
 def description
@@ -77,11 +81,21 @@ def breeds
   Breed.all.shuffle.take(random_number)
 end
 
+def description
+  [
+    "Loves walks, bones and children.",
+    "Needs fences of more than 3m. Can jump and catch birds flying past.",
+    "Was submitted to foster care by a tearful widow, after killing and eating her husband.",
+    "Was submitted to foster care by a grateful widow, after killing and eating her husband.",
+    "Will sleep all day. Probably won't notice you."
+  ].sample
+end
+
 20.times do
   Animal.create(
     name: name,
-    dob: dob,
     description: description,
+    dob: dob,
     size: size,
     sex: sex,
     species: species,
@@ -103,8 +117,8 @@ end
 20.times do
   Animal.create(
     name: name,
-    dob: dob,
     description: description,
+    dob: dob,
     size: size,
     sex: sex,
     species: species,

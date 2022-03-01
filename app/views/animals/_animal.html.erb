@@ -1,62 +1,11 @@
-<div id="<%= dom_id animal %>">
-  <p>
-    <strong>Name:</strong>
-    <%= animal.name %>
-  </p>
+<div id="<%= dom_id animal %>" class="card">
+  <%= link_to image_tag(animal.photos.first.address, class: "card-img-top"), animal %>
+  <div class="card-body">
+    <div class="d-grid gap-2">
+      <%= link_to animal.name, animal, class: "btn btn-primary" %>
+    </div>
 
-  <p>
-    <strong>Dob:</strong>
-    <%= animal.dob %>
-  </p>
+    <p class="card-text"><%= animal.summary %></p>
 
-  <p>
-    <strong>Description:</strong>
-    <%= animal.description %>
-  </p>
-
-  <p>
-    <strong>Size:</strong>
-    <%= animal.size %>
-  </p>
-
-  <p>
-    <strong>Sex:</strong>
-    <%= animal.sex %>
-  </p>
-
-  <p>
-    <strong>Species:</strong>
-    <%= animal.species %>
-  </p>
-
-  <p>
-    <strong>Age:</strong>
-    <%= animal.age %>
-  </p>
-
-  <p>
-    <strong>Breeds:</strong>
-    <%= animal.breeds.map{ |b| b.breed }.join(", ") %>
-  </p>
-
-  <div>
-    <h2>Adoption Details</h2>
-
-      <p>
-        <strong>Adopted by:</strong>
-        <%= animal.adopted_by_name %>
-      </p>
-      <p>
-        <strong>email:</strong>
-        <%= animal.adopted_by_email %>
-      </p>
-      <p>
-        <strong>phone:</strong>
-        <%= animal.adopted_by_phone %>
-      </p>
-      <p>
-        <strong>date:</strong>
-        <%= animal.adopted_date %>
-      </p>
   </div>
 </div>
