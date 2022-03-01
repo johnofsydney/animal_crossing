@@ -13,6 +13,10 @@ RSpec.describe Animal, type: :model do
   let(:photo) { create(:photo) }
 
   it { is_expected.to validate_presence_of(:name) }
+  it { is_expected.to validate_presence_of(:size) }
+  it { is_expected.to validate_presence_of(:sex) }
+  it { is_expected.to validate_presence_of(:species) }
+
   it { is_expected.to have_many(:photos) }
 
   describe '#age and #age_group' do

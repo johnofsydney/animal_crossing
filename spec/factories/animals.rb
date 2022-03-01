@@ -3,5 +3,8 @@ FactoryBot.define do
     name    { Faker::Name.first_name }
     dob     { Faker::Date.birthday(max_age: 14) }
     description { Faker::Lorem.paragraph }
+    size { 'small' }
+    sex { 'male' }
+    species { 'dog' }
   end
 end

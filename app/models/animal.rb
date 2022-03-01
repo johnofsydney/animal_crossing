@@ -18,6 +18,9 @@ class Animal < ApplicationRecord
   accepts_nested_attributes_for :breeds
 
   validates :name, presence: true
+  validates :size, presence: true
+  validates :sex, presence: true
+  validates :species, presence: true
 
   scope :adopted, -> { where.not(adopted_date: nil) }
   scope :not_adopted, -> { where(adopted_date: nil) }
