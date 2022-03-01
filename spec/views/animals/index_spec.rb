@@ -12,7 +12,7 @@ RSpec.describe "/animals/index", type: :view do
   end
 
   it "displays animals name" do
-    assign :animals, [create(:animal_with_photos)]
+    assign :animals, animals
 
     render
 
