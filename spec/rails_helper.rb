@@ -1,5 +1,9 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
+
+require 'shoulda/matchers'
+require 'factory_bot'
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
@@ -61,4 +65,20 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.include FactoryBot::Syntax::Methods
+end
+
+
+Shoulda::Matchers.configure do |config|
+  # this extends the shoulda matchers to ask such questions as
+  # it { should have_many(:photos) }
+  # without failing in this manner:
+  # Failure/Error: it { should have_many(:photos) }
+  # expected #<Animal id: nil, ...> to respond to `has_many?`
+
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
 end

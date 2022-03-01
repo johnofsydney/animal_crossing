@@ -48,6 +48,7 @@ group :development, :test do
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
   # gem 'capybara'
+  gem 'factory_bot_rails'
 end
 
 group :development do
@@ -70,3 +71,7 @@ gem 'bundler-audit'
 # TODO: this MUST move to dev test
 gem 'faker'
 gem 'simplecov', require: false, group: :test
+
+group :test do
+  gem 'shoulda-matchers'
+end
