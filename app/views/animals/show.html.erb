@@ -16,7 +16,7 @@
     </p>
   </div>
 
-  <% if @is_user %> <!-- Logged in users can see adoption details -->
+  <% if @user? %> <!-- Logged in users can see adoption details -->
     <%= render "adoption_details", animal: @animal%>
   <% end %>
 

@@ -45,11 +45,10 @@ class Animal < ApplicationRecord
     "#{self.size.capitalize} #{self.sex} #{self.breeds_summary}, approximately #{self.age}."
   end
 
-
   def breeds_summary
     return '' if self.breeds.empty?
 
-    self.breeds.map{|b| b.breed }.join(' x ')
+    self.breeds.map(&:breed).join(' x ')
   end
 
   private
@@ -57,7 +56,4 @@ class Animal < ApplicationRecord
   def days_old
     @days_old ||= (Time.zone.today - self.dob).to_i
   end
-
-
-
 end

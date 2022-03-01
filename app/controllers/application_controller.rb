@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
-  def is_user
+  def user?
     # TODO: add devise for users
-    @is_user || false
+    @user ||= false
   end
 end
