@@ -47,7 +47,7 @@ group :development, :test do
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
-  # gem 'capybara'
+  gem 'capybara'
   gem 'factory_bot_rails'
 end
 
