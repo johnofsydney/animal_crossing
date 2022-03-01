@@ -23,7 +23,11 @@ def name
 end
 
 def dob
-  Faker::Date.birthday(max_age: 14)
+  [
+    Faker::Date.between(from: 200.days.ago, to: 14.days.ago),
+    Faker::Date.between(from: 36.months.ago, to: 6.months.ago),
+    Faker::Date.between(from: 15.years.ago, to: 2.years.ago)
+  ].sample
 end
 
 def description
@@ -84,7 +88,7 @@ def description
     "Was submitted to foster care by a tearful widow, after killing and eating her husband.",
     "Was submitted to foster care by a grateful widow, after killing and eating her husband.",
     "Will sleep all day. Probably won't notice you."
-  ].shuffle.take(1)
+  ].sample
 end
 
 20.times do
@@ -92,7 +96,6 @@ end
     name: name,
     description: description,
     dob: dob,
-    description: description,
     size: size,
     sex: sex,
     species: species,
@@ -116,7 +119,6 @@ end
     name: name,
     description: description,
     dob: dob,
-    description: description,
     size: size,
     sex: sex,
     species: species,

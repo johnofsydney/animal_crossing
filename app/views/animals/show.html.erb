@@ -2,18 +2,6 @@
 
   <h2><%= @animal.name %></h2>
 
-  <p>
-    <%= @animal.description %>
-  </p>
-
-
-
-
-  <% if @is_user %> <!-- Logged in users can see adoption details -->
-    <%= render "adoption_details", animal: @animal%>
-  <% end %>
-
-
   <div id="photos" class="row gallery">
     <% @animal.photos.each do |photo| %>
       <div class="col-sm-4">
@@ -22,6 +10,15 @@
     <% end %>
   </div>
 
+  <div>
+    <p>
+      <%= @animal.description %>
+    </p>
+  </div>
+
+  <% if @is_user %> <!-- Logged in users can see adoption details -->
+    <%= render "adoption_details", animal: @animal%>
+  <% end %>
 
 
 <table class="table">
