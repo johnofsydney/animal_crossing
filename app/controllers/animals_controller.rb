@@ -10,6 +10,7 @@ class AnimalsController < ApplicationController
 
   # GET /animals/1 or /animals/1.json
   def show
+    @user = user?
     @animal
   end
 
@@ -24,6 +25,7 @@ class AnimalsController < ApplicationController
   # POST /animals or /animals.json
   def create
     @animal = Animal.new(animal_params)
+    # TODO: Consider adding photo at create time?
 
     if @animal.save
       redirect_to animal_url(@animal), notice: 'Animal was successfully created.'
@@ -79,7 +81,7 @@ class AnimalsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def animal_params
-    params.require(:animal).permit(:name, :dob, :description, :size)
+    params.require(:animal).permit(:name, :dob, :description, :size, :sex, :species)
   end
 
   def search_params

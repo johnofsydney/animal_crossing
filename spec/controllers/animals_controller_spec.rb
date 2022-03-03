@@ -1,18 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe AnimalsController, type: :controller do
+  let(:animal_one) { create(:animal, size: 'small') }
+  let(:animal_two) { create(:animal, size: 'small') }
+  let(:animal_three) { create(:animal, size: 'large') }
+
   let(:breed) { Breed.create(breed: 'Cavoodle') }
-  let(:animal_one) do
-    Animal.create(name: 'foobar', size: 'small')
-  end
-
-  let(:animal_two) do
-    Animal.create(name: 'bazfoo', size: 'small')
-  end
-
-  let(:animal_three) do
-    Animal.create(name: 'foobar', size: 'large')
-  end
 
   describe '#index' do
     before do
@@ -33,12 +26,6 @@ RSpec.describe AnimalsController, type: :controller do
   end
 
   describe '#show' do
-    let(:animal_one) do
-      Animal.create(
-        name: 'foobar'
-      )
-    end
-
     it 'renders the template' do
       get :show, params: { id: animal_one.id }
       expect(response).to render_template('show')
@@ -52,8 +39,21 @@ RSpec.describe AnimalsController, type: :controller do
   end
 
   describe '#create' do
+    let(:valid_animal_params) do
+      {
+        name: 'duncan',
+        dob: Date.new(2021, 12, 25),
+        description: 'is a good boy',
+        size: 'small',
+        sex: 'male',
+        species: 'dog'
+      }
+    end
+
     it 'creates a new record' do
-      post :create, params: { animal: { name: 'duncan' } }
+      post :create, params: {
+        animal: valid_animal_params
+      }
       expect(assigns[:animal]).to eq(Animal.first)
     end
   end
@@ -113,17 +113,11 @@ RSpec.describe AnimalsController, type: :controller do
       allow(mock_s3_client).to receive(:delete_object)
     end
 
+    let(:photo) { create(:photo) }
+    let(:animal) { photo.animal }
+
     let(:mock_s3_client) do
       Aws::S3::Client.new(stub_responses: true)
-    end
-
-    let!(:animal) do
-      Animal.create(
-        name: 'John',
-        photos: [
-          Photo.create(address: 's3bucketaddress')
-        ]
-      )
     end
 
     it 'destroy a record' do
@@ -147,15 +141,10 @@ RSpec.describe AnimalsController, type: :controller do
       Aws::S3::Client.new(stub_responses: true)
     end
 
-    let!(:animal) do
-      Animal.create(
-        name: 'John',
-        photos: [
-          photo
-        ]
-      )
-    end
-    let(:photo) { Photo.create(address: 's3bucketaddress') }
+    let(:photo) { create(:photo) }
+    let(:animal) { photo.animal }
+
+    let(:expected_key) { photo.address.split('/').last }
 
     it 'destroy a record', :aggregate_failures do
       delete :delete_photo, params: { animal_id: animal.id, photo_id: photo.id }
@@ -165,7 +154,9 @@ RSpec.describe AnimalsController, type: :controller do
 
     it 'sends a delete request to S3' do
       delete :delete_photo, params: { animal_id: animal.id, photo_id: photo.id }
-      expect(mock_s3_client).to have_received(:delete_object)
+      expect(mock_s3_client)
+        .to have_received(:delete_object)
+        .with(hash_including(key: expected_key))
     end
   end
 
@@ -178,8 +169,8 @@ RSpec.describe AnimalsController, type: :controller do
 
     let(:params) do
       {
-        size: 'small',
-        name: 'foobar'
+        size: animal_one.size,
+        name: animal_one.name
       }
     end
 
@@ -201,7 +192,7 @@ RSpec.describe AnimalsController, type: :controller do
       it 'assigns the records' do
         get :search, params: params
 
-        expect(assigns(:animals)).to eq([animal_one, animal_two, animal_three])
+        expect(assigns(:animals)).to match_array([animal_one, animal_two, animal_three])
       end
     end
 
@@ -216,7 +207,7 @@ RSpec.describe AnimalsController, type: :controller do
       it 'assigns the records' do
         get :search, params: params
 
-        expect(assigns(:animals)).to eq([animal_one, animal_two])
+        expect(assigns(:animals)).to match_array([animal_one, animal_two])
       end
     end
 
