@@ -10,6 +10,7 @@ class AnimalsController < ApplicationController
 
   # GET /animals/1 or /animals/1.json
   def show
+    @user = user?
     @animal
   end
 
