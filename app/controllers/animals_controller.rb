@@ -5,52 +5,57 @@ class AnimalsController < ApplicationController
 
   # GET /animals or /animals.json
   def index
-    @animals = Animal.all
+    # save this for admin / logged in users
+    @user = user?
+
+    if user?
+      @animals = Animal.all
+    else
+      @animals = Animal.not_adopted
+    end
+
   end
 
-  # GET /animals/1 or /animals/1.json
   def show
+    # TODO: fix this nonsense
     @user = user?
+    @dogs_path = '/animals/dogs'
+    # @cats_path = '/animals/cats'
     @animal
   end
 
-  # GET /animals/new
   def new
     @animal = Animal.new
   end
 
-  # GET /animals/1/edit
   def edit; end
 
-  # POST /animals or /animals.json
   def create
     @animal = Animal.new(animal_params)
-    # TODO: Consider adding photo at create time?
 
     if @animal.save
+      PhotosService.new(@animal, params).add_photos
+      BreedsService.new(@animal, params).save_breeds
+
       redirect_to animal_url(@animal), notice: 'Animal was successfully created.'
     else
       render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /animals/1 or /animals/1.json
   def update
-    # send the animal object and params to update services for photos and breeds
-    # TODO: - safe params for nested photo attributes
-    # TODO: - safe params for nested breed attributes
-    PhotosService.new(@animal, params).add_photos
-    BreedsService.new(@animal, params).save_breeds
-
-    # fields on the animal object updated in the standard way
     if @animal.update(animal_params)
+      # send the animal object and params to update services for photos and breeds
+      # TODO: - safe params for nested photo attributes
+      # TODO: - safe params for nested breed attributes
+      PhotosService.new(@animal, params).add_photos
+      BreedsService.new(@animal, params).save_breeds
       redirect_to animal_url(@animal), notice: 'Animal was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /animals/1 or /animals/1.json
   def destroy
     PhotosService.new(@animal).delete_photos
 
@@ -64,12 +69,34 @@ class AnimalsController < ApplicationController
 
     PhotosService.new(@animal, params).delete_photo
 
-    # redirect_to @animal
     redirect_to edit_animal_path(@animal)
   end
 
-  def search
-    @animals = SearchService.new(search_params).results
+  # def search
+  #   @animals = SearchService.new(search_params).results
+  # end
+  def dogs
+    @animals = Animal.not_adopted.dog
+    @title = "Dogs available for adoption"
+    render :index
+  end
+
+  def cats
+    @animals = Animal.not_adopted.cat
+    @title = "Cats available for adoption"
+    render :index
+  end
+
+  def others
+    @animals = Animal.not_adopted.other
+    @title = "Other animals available for adoption"
+    render :index
+  end
+
+  def adopted
+    @animals = Animal.adopted
+    @title = "Animals already adopted"
+    render :index
   end
 
   private
@@ -84,19 +111,19 @@ class AnimalsController < ApplicationController
     params.require(:animal).permit(:name, :dob, :description, :size, :sex, :species)
   end
 
-  def search_params
-    params.permit(
-      :size,
-      :name,
-      :sex,
-      :species,
-      :age_group,
-      :good_with_small_children,
-      :good_with_older_children,
-      :good_with_other_dogs,
-      :good_with_cats,
-      :can_be_left_alone_during_working_hours,
-      :apartment_friendly
-    )
-  end
+  # def search_params
+  #   params.permit(
+  #     :size,
+  #     :name,
+  #     :sex,
+  #     :species,
+  #     :age_group,
+  #     :good_with_small_children,
+  #     :good_with_older_children,
+  #     :good_with_other_dogs,
+  #     :good_with_cats,
+  #     :can_be_left_alone_during_working_hours,
+  #     :apartment_friendly
+  #   )
+  # end
 end
