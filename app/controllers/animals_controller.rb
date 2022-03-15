@@ -8,12 +8,11 @@ class AnimalsController < ApplicationController
     # save this for admin / logged in users
     @user = user?
 
-    if user?
-      @animals = Animal.all
-    else
-      @animals = Animal.not_adopted
-    end
-
+    @animals = if user?
+                 Animal.all
+               else
+                 Animal.not_adopted
+               end
   end
 
   def show
@@ -77,25 +76,25 @@ class AnimalsController < ApplicationController
   # end
   def dogs
     @animals = Animal.not_adopted.dog
-    @title = "Dogs available for adoption"
+    @title = 'Dogs available for adoption'
     render :index
   end
 
   def cats
     @animals = Animal.not_adopted.cat
-    @title = "Cats available for adoption"
+    @title = 'Cats available for adoption'
     render :index
   end
 
   def others
     @animals = Animal.not_adopted.other
-    @title = "Other animals available for adoption"
+    @title = 'Other animals available for adoption'
     render :index
   end
 
   def adopted
     @animals = Animal.adopted
-    @title = "Animals already adopted"
+    @title = 'Animals already adopted'
     render :index
   end
 

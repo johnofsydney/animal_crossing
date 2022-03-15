@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe AnimalsController, type: :controller do
+  # TODO: get rid of these too many lets
   let(:animal_one) { create(:animal, size: 'small', sex: sex, species: species) }
   let(:animal_two) { create(:animal, size: 'small', sex: sex, species: species) }
   let(:animal_three) { create(:animal, size: 'large', sex: sex, species: species) }
@@ -133,6 +134,7 @@ RSpec.describe AnimalsController, type: :controller do
     end
   end
 
+  # rubocop:disable RSpec/MultipleMemoizedHelpers
   describe '#delete_photo' do
     before do
       allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
@@ -161,22 +163,5 @@ RSpec.describe AnimalsController, type: :controller do
         .with(hash_including(key: expected_key))
     end
   end
-
-  describe '#dogs' do``
-    before do
-      animal_one
-      animal_two
-      animal_three
-    end
-
-    it 'assigns the records' do
-      get :index
-      expect(assigns(:animals)).to eq([animal_one, animal_two, animal_three])
-    end
-
-    it 'renders the index template' do
-      get :index
-      expect(response).to render_template('index')
-    end
-  end
+  # rubocop:enable RSpec/MultipleMemoizedHelpers
 end

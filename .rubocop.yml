@@ -57,6 +57,9 @@ Metrics/ParameterLists:
   Max: 4
   Enabled: true
 
+Rails/I18nLocaleTexts:
+  Enabled: false
+
 RSpec/MultipleMemoizedHelpers:
   Max: 9 # number of let variables available to an example group
 
