@@ -11,6 +11,8 @@ class PhotosService
 
   # adds several photo files to S3, and inserts records to DB
   def add_photos
+    return if params['animal']['photos'].blank?
+
     images = params['animal']['photos'].select(&:present?)
     return if images.blank?
 

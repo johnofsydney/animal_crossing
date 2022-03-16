@@ -1,11 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe AnimalsController, type: :controller do
-  let(:animal_one) { create(:animal, size: 'small') }
-  let(:animal_two) { create(:animal, size: 'small') }
-  let(:animal_three) { create(:animal, size: 'large') }
+  # TODO: get rid of these too many lets
+  let(:animal_one) { create(:animal, size: 'small', sex: sex, species: species) }
+  let(:animal_two) { create(:animal, size: 'small', sex: sex, species: species) }
+  let(:animal_three) { create(:animal, size: 'large', sex: sex, species: species) }
 
   let(:breed) { Breed.create(breed: 'Cavoodle') }
+  let(:sex) { 'male' }
+  let(:species) { 'dog' }
 
   describe '#index' do
     before do
@@ -131,6 +134,7 @@ RSpec.describe AnimalsController, type: :controller do
     end
   end
 
+  # rubocop:disable RSpec/MultipleMemoizedHelpers
   describe '#delete_photo' do
     before do
       allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
@@ -159,66 +163,5 @@ RSpec.describe AnimalsController, type: :controller do
         .with(hash_including(key: expected_key))
     end
   end
-
-  describe '#search' do
-    before do
-      animal_one
-      animal_two
-      animal_three
-    end
-
-    let(:params) do
-      {
-        size: animal_one.size,
-        name: animal_one.name
-      }
-    end
-
-    it 'renders the search template' do
-      get :search
-
-      expect(response).to render_template('search')
-    end
-
-    it 'assigns the records' do
-      get :search, params: params
-
-      expect(assigns(:animals)).to eq([animal_one])
-    end
-
-    context 'when the params (from the search form) are blank' do
-      let(:params) { { size: '', name: '' } }
-
-      it 'assigns the records' do
-        get :search, params: params
-
-        expect(assigns(:animals)).to match_array([animal_one, animal_two, animal_three])
-      end
-    end
-
-    context 'when one of the params is not present' do
-      let(:params) do
-        {
-          size: 'small',
-          name: ''
-        }
-      end
-
-      it 'assigns the records' do
-        get :search, params: params
-
-        expect(assigns(:animals)).to match_array([animal_one, animal_two])
-      end
-    end
-
-    context 'when the params are not present' do
-      let(:params) { {} }
-
-      it 'assigns the records' do
-        get :search, params: params
-
-        expect(assigns(:animals)).to eq([animal_one, animal_two, animal_three])
-      end
-    end
-  end
+  # rubocop:enable RSpec/MultipleMemoizedHelpers
 end

@@ -5,6 +5,7 @@ RSpec.describe '/animals/index', type: :view do
 
   it 'displays title' do
     assign :animals, animals
+    assign :title, 'Animals'
 
     render
 

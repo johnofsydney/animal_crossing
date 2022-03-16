@@ -20,7 +20,7 @@ RSpec.describe S3 do
     let(:key) { 'key' }
     let(:body) { 'body' }
 
-    it { expect(put_object[:success]).to eq(true) }
+    it { expect(put_object[:success]).to be(true) }
 
     it 'invokes the SWS S3 client' do
       put_object
@@ -45,7 +45,7 @@ RSpec.describe S3 do
     let(:bucket) { 'bucket' }
     let(:key) { 'key' }
 
-    it { expect(delete_object[:success]).to eq(true) }
+    it { expect(delete_object[:success]).to be(true) }
 
     it 'invokes the SWS S3 client' do
       delete_object
