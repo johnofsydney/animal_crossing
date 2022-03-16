@@ -10,6 +10,8 @@ class BreedsService
   # will write those params as the breeds into the animal object.
   # any existing breeds will be overwritten
   def save_breeds
+    return if params[:breeds].blank?
+
     breed_ids = params[:breeds][:ids].select(&:present?).map(&:to_i)
     return if breed_ids.blank?
 
