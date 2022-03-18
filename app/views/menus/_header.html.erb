@@ -28,7 +28,13 @@
             <a class="nav-link" href="/animals/new">New Animal</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/animals/cats">Login</a>
+            <%= current_user.email if current_user %>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/users/sign_in">Login</a>
+          </li>
+          <li class="nav-item">
+            <%= button_to("Log Out", destroy_user_session_path, method: :delete) %>
           </li>
         </ul>
       </div>
