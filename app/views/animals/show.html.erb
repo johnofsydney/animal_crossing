@@ -1,6 +1,10 @@
 <p style="color: green"><%= notice %></p>
 
   <h2><%= @animal.name %></h2>
+  <% if current_user %> <!-- Logged in users can edit -->
+    <%= link_to("Edit", edit_animal_path) %>
+  <% end %>
+
 
   <div id="photos" class="row gallery">
     <% @animal.photos.each do |photo| %>
@@ -16,7 +20,7 @@
     </p>
   </div>
 
-  <% if @user %> <!-- Logged in users can see adoption details -->
+  <% if current_user %> <!-- Logged in users can see adoption details -->
     <%= render "adoption_details", animal: @animal%>
   <% end %>
 
