@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe AnimalsController, type: :controller do
-  # include Devise::Test::ControllerHelpers
-
   let(:user) { create(:user) }
   let(:animal) { create(:animal) }
 
@@ -93,6 +91,7 @@ RSpec.describe AnimalsController, type: :controller do
     let(:animal_name) { 'Rosko' }
 
     let(:image_file) do
+      # this is not an instance of Photo
       fixture_file_upload('SpongeBob.svg.png', 'image/png')
     end
 

@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe '/animals/show', type: :view do
-  # include Devise::Test::ControllerHelpers
-
   let(:animal) { create(:animal_with_photos) }
 
   it 'displays animals name' do
