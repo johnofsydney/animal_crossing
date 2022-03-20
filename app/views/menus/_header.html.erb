@@ -21,6 +21,7 @@
       </ul>
       <div class="d-flex">
         <ul class="navbar-nav me-auto">
+        <% if current_user %>
           <li class="nav-item">
             <a class="nav-link" href="/animals/adopted">Adopted Animals</a>
           </li>
@@ -28,14 +29,23 @@
             <a class="nav-link" href="/animals/new">New Animal</a>
           </li>
           <li class="nav-item">
-            <%= current_user.email if current_user %>
+            <%= button_to(
+              "Log Out",
+              destroy_user_session_path,
+              method: :delete,
+              class: "btn btn-primary"
+              ) %>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/users/sign_in">Login</a>
-          </li>
-          <li class="nav-item">
-            <%= button_to("Log Out", destroy_user_session_path, method: :delete) %>
-          </li>
+        <% else %>
+            <li class="nav-item">
+              <%= button_to(
+                "Log In",
+                "/users/sign_in",
+                class: "btn btn-primary"
+                ) %>
+            </li>
+          <% end %>
+
         </ul>
       </div>
     </div>

@@ -1,43 +1,28 @@
 require 'rails_helper'
 
 RSpec.describe AnimalsController, type: :controller do
-  # TODO: get rid of these too many lets
-  let(:animal_one) { create(:animal, size: 'small', sex: sex, species: species) }
-  let(:animal_two) { create(:animal, size: 'small', sex: sex, species: species) }
-  let(:animal_three) { create(:animal, size: 'large', sex: sex, species: species) }
+  # include Devise::Test::ControllerHelpers
 
-  let(:breed) { Breed.create(breed: 'Cavoodle') }
-  let(:sex) { 'male' }
-  let(:species) { 'dog' }
+  let(:user) { create(:user) }
+  let(:animal) { create(:animal) }
 
   describe '#index' do
-    before do
-      animal_one
-      animal_two
-      animal_three
-    end
-
-    it 'assigns the records' do
+    it 'redirects to the root path' do
       get :index
-      expect(assigns(:animals)).to eq([animal_one, animal_two, animal_three])
-    end
-
-    it 'renders the index template' do
-      get :index
-      expect(response).to render_template('index')
+      expect(response).to redirect_to(root_path)
     end
   end
 
   describe '#show' do
     it 'renders the template' do
-      get :show, params: { id: animal_one.id }
+      get :show, params: { id: animal.id }
       expect(response).to render_template('show')
     end
 
     it 'assigns the correct record' do
-      get :show, params: { id: animal_one.id }
+      get :show, params: { id: animal.id }
 
-      expect(assigns(:animal)).to eq(animal_one)
+      expect(assigns(:animal)).to eq(animal)
     end
   end
 
@@ -53,11 +38,31 @@ RSpec.describe AnimalsController, type: :controller do
       }
     end
 
-    it 'creates a new record' do
-      post :create, params: {
-        animal: valid_animal_params
-      }
-      expect(assigns[:animal]).to eq(Animal.first)
+    context 'when the user is not logged in' do
+      before do
+        post :create, params: { animal: valid_animal_params }
+      end
+
+      it 'does not create a new record' do
+        expect(Animal.count).to eq(0)
+      end
+    end
+
+    context 'when the user is logged in' do
+      before do
+        sign_in user
+
+        post :create, params: { animal: valid_animal_params }
+      end
+
+      it 'creates a new record' do
+        expect(Animal.count).to eq(1)
+      end
+
+      it 'has the correct data' do
+        animal = Animal.last
+        expect(animal.attributes.with_indifferent_access).to match(hash_including(valid_animal_params))
+      end
     end
   end
 
@@ -71,42 +76,52 @@ RSpec.describe AnimalsController, type: :controller do
       Aws::S3::Client.new(stub_responses: true)
     end
 
-    # let(:animal) do
-    #   Animal.create(name: 'John')
-    # end
+    let(:breed) { Breed.create(breed: 'tim tam') }
 
     let(:params) do
       {
-        id: animal_one.id,
+        id: animal.id,
         animal: {
-          name: 'duncan',
-          photos: [photo]
+          name: animal_name,
+          photos: [image_file]
         },
         breeds: {
           ids: [breed.id]
         }
       }
     end
+    let(:animal_name) { 'Rosko' }
 
-    let(:photo) do
+    let(:image_file) do
       fixture_file_upload('SpongeBob.svg.png', 'image/png')
     end
 
-    it 'updates a record' do
-      put :update, params: params
-      expect(assigns[:animal].name).to eq('duncan')
+    xcontext 'when the user is not logged in' do
+      # TODO: add the user is not logged in case
     end
 
-    it 'puts an object into S3' do
-      put :update, params: params
+    context 'when the user is logged in' do
+      before do
+        sign_in user
+      end
 
-      expect(mock_s3_client).to have_received(:put_object)
-    end
+      it 'updates a record' do
+        put :update, params: params
+        expect(assigns[:animal].name).to eq(animal_name)
+      end
 
-    it 'save the photo address on the photo for the animal' do
-      put :update, params: params
+      it 'puts an object into S3' do
+        put :update, params: params
 
-      expect(animal_one.reload.photos.first.address).to match('amazonaws.com/photo')
+        expect(mock_s3_client).to have_received(:put_object)
+      end
+
+      it 'save the photo address on the photo for the animal', :aggregate_failures do
+        put :update, params: params
+
+        expect(animal.reload.photos.first.address).to match('amazonaws.com/photo')
+        expect(animal.reload.photos.first.address).to match(animal_name)
+      end
     end
   end
 
@@ -123,18 +138,26 @@ RSpec.describe AnimalsController, type: :controller do
       Aws::S3::Client.new(stub_responses: true)
     end
 
-    it 'destroy a record' do
-      delete :destroy, params: { id: animal.id }
-      expect(Animal.count).to eq(0)
+    xcontext 'when the user is not logged in' do
     end
 
-    it 'sends a delete request to S3' do
-      delete :destroy, params: { id: animal.id }
-      expect(mock_s3_client).to have_received(:delete_object)
+    context 'when the user is logged in' do
+      before do
+        sign_in user
+      end
+
+      it 'destroy a record' do
+        delete :destroy, params: { id: animal.id }
+        expect(Animal.count).to eq(0)
+      end
+
+      it 'sends a delete request to S3' do
+        delete :destroy, params: { id: animal.id }
+        expect(mock_s3_client).to have_received(:delete_object)
+      end
     end
   end
 
-  # rubocop:disable RSpec/MultipleMemoizedHelpers
   describe '#delete_photo' do
     before do
       allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
@@ -163,5 +186,4 @@ RSpec.describe AnimalsController, type: :controller do
         .with(hash_including(key: expected_key))
     end
   end
-  # rubocop:enable RSpec/MultipleMemoizedHelpers
 end

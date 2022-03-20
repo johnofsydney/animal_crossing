@@ -21,7 +21,7 @@ FactoryBot.define do
   end
 end
 
-# create(:animal).count => 0
-# create(:animal_with_photos).count => 5
-# create(:animal_with_photos, photos_count:15).count => 15
+# create(:animal).photos.count => 0
+# create(:animal_with_photos).photos.count => 5
+# create(:animal_with_photos, photos_count:15).photos.count => 15
 # https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#rspec

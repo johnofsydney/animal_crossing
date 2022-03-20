@@ -2,24 +2,14 @@ require 'aws/s3'
 
 class AnimalsController < ApplicationController
   before_action :set_animal, only: %i[show edit update destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
 
-  # GET /animals or /animals.json
   def index
-    # save this for admin / logged in users
-    @user = user?
-
-    @animals = if user?
-                 Animal.all
-               else
-                 Animal.not_adopted
-               end
+    # no one needs to see the list of all animals ever
+    redirect_to root_path # and return nil
   end
 
   def show
-    # TODO: fix this nonsense
-    @user = user?
-    @dogs_path = '/animals/dogs'
-    # @cats_path = '/animals/cats'
     @animal
   end
 
