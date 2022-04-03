@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: animals
+#
+#  id                                     :bigint           not null, primary key
+#  name                                   :string
+#  dob                                    :date
+#  description                            :string
+#  created_at                             :datetime         not null
+#  updated_at                             :datetime         not null
+#  size                                   :string
+#  sex                                    :string
+#  good_with_small_children               :boolean
+#  good_with_older_children               :boolean
+#  good_with_other_dogs                   :boolean
+#  good_with_cats                         :boolean
+#  can_be_left_alone_during_working_hours :boolean
+#  apartment_friendly                     :boolean
+#  adopted_by_name                        :string
+#  adopted_by_email                       :string
+#  adopted_by_phone                       :string
+#  adopted_date                           :date
+#  species                                :string
+#
 class Animal < ApplicationRecord
   AGE_GROUPS = {
     puppy: 180,
@@ -42,13 +66,17 @@ class Animal < ApplicationRecord
   end
 
   def summary
-    "#{self.size.capitalize} #{self.sex} #{self.breeds_summary}, approximately #{self.age}."
+    "#{self.size.capitalize} #{self.sex} #{self.breeds.any? ? self.breeds_summary : self.species}, approximately #{self.age}."
   end
 
   def breeds_summary
     return '' if self.breeds.empty?
 
     self.breeds.map(&:breed).join(' x ')
+  end
+
+  def adopted?
+    self.adopted_date.present?
   end
 
   private

@@ -1,19 +1,3 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
-
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
-
 Breed.destroy_all
 Photo.destroy_all
 Animal.destroy_all
@@ -31,7 +15,7 @@ def dob
 end
 
 def description
-  Faker::Lorem.paragraph
+  Faker::Lorem.paragraphs(number: 6).join(' ')
 end
 
 def size
@@ -42,11 +26,7 @@ def sex
   %w[male female].sample
 end
 
-def species
-  %w[dog cat other].sample
-end
-
-def address
+def dog_photo_address
   [
     'https://placedog.net/600',
     'https://placedog.net/601',
@@ -59,48 +39,99 @@ def address
   ].sample
 end
 
+def cat_photo_address
+  [
+    'http://placekitten.com/200/300',
+    'http://placekitten.com/300/300',
+    'http://placekitten.com/400/300',
+    'http://placekitten.com/400/400',
+    'http://placekitten.com/400/500',
+    'http://placekitten.com/400/500',
+    'http://placekitten.com/500/500',
+    'http://placekitten.com/600/400',
+  ].sample
+end
+
+def other_animal_photo_address
+  [
+    'https://picsum.photos/200/300',
+    'https://picsum.photos/300/300',
+    'https://picsum.photos/400/300',
+    'https://picsum.photos/300/400',
+    'https://picsum.photos/400/400',
+    'https://picsum.photos/500/400',
+  ].sample
+end
+
 def random_number
-  (1..3).to_a.sample
+  (4..6).to_a.sample
 end
 
 def random_boolean
   [true, false].sample
 end
 
-def photos
-  (1..random_number)
+def dog_photos
+  (3..random_number)
     .to_a
-    .map { Photo.create(address: address) }
+    .map { Photo.create(address: dog_photo_address) }
+end
+
+def cat_photos
+  (3..random_number)
+    .to_a
+    .map { Photo.create(address: cat_photo_address) }
+end
+
+def other_animal_photos
+  (3..random_number)
+    .to_a
+    .map { Photo.create(address: other_animal_photo_address) }
 end
 
 %w[Alsatian Pug Staffy Schnauser Cavoodle].each do |breed|
   Breed.create(breed: breed)
 end
 
-def breeds
+def dog_breeds
   Breed.all.shuffle.take(random_number)
 end
 
-def description
+def dog_description
   [
     "Loves walks, bones and children.",
     "Needs fences of more than 3m. Can jump and catch birds flying past.",
     "Was submitted to foster care by a tearful widow, after killing and eating her husband.",
     "Was submitted to foster care by a grateful widow, after killing and eating her husband.",
     "Will sleep all day. Probably won't notice you."
+  ].sample + " " + description
+end
+
+def cat_description
+  [
+    "Sleeps all day. Will wake to drink milk.",
+    "It's just a cat, it doesnt do anything, or care about you.",
   ].sample
 end
 
-20.times do
+def other_animal_description
+  [
+    "No one has ever seen an animal like this before. We don't know what it is.",
+    "Cute feathers, nasty claws. You pay your money and you take your chances.",
+  ].sample + " " + description
+end
+
+# make 100 dogs
+100.times do
   Animal.create(
     name: name,
-    description: description,
+    description: dog_description,
     dob: dob,
     size: size,
     sex: sex,
-    species: species,
-    photos: photos,
-    breeds: breeds,
+    species: 'dog',
+    photos: dog_photos,
+    breeds: dog_breeds,
     good_with_small_children: random_boolean,
     good_with_older_children: random_boolean,
     good_with_other_dogs: random_boolean,
@@ -114,25 +145,29 @@ end
   )
 end
 
-20.times do
-  Animal.create(
-    name: name,
-    description: description,
-    dob: dob,
-    size: size,
-    sex: sex,
-    species: species,
-    photos: photos,
-    breeds: breeds,
-    good_with_small_children: random_boolean,
-    good_with_older_children: random_boolean,
-    good_with_other_dogs: random_boolean,
-    good_with_cats: random_boolean,
-    can_be_left_alone_during_working_hours: random_boolean,
-    apartment_friendly: random_boolean,
-    adopted_by_name: Faker::Name.name,
-    adopted_by_email: Faker::Internet.email,
-    adopted_by_phone: Faker::PhoneNumber.cell_phone_with_country_code,
-    adopted_date: Faker::Date.between(from: 2.years.ago, to: 2.days.ago)
-  )
+# make 30 cats
+Animal.all.shuffle.take(30).each do |animal|
+  animal.description = cat_description
+  animal.species = 'cat'
+  animal.photos = cat_photos
+  animal.breeds = []
+  animal.save
+end
+
+# make 20 other animals
+Animal.dog.shuffle.take(20).each do |animal|
+  animal.description = other_animal_description
+  animal.species = 'other'
+  animal.photos = other_animal_photos
+  animal.breeds = []
+  animal.save
+end
+
+# make 50 animals adopted
+Animal.all.shuffle.take(50).each do |animal|
+  animal.adopted_by_name = Faker::Name.name
+  animal.adopted_by_email = Faker::Internet.email
+  animal.adopted_by_phone = Faker::PhoneNumber.cell_phone_with_country_code
+  animal.adopted_date = Faker::Date.between(from: 2.years.ago, to: 2.days.ago)
+  animal.save
 end

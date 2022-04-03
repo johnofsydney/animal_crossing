@@ -1,0 +1,28 @@
+<table class="table">
+  <tbody>
+    <tr>
+      <td><strong>Name</strong></td>
+      <td><%= animal.name.capitalize %></td>
+    </tr>
+    <tr>
+      <td><strong>Size</strong></td>
+      <td><%= animal.size.capitalize %></td>
+    </tr>
+    <tr>
+      <td><strong>Sex:</strong></td>
+      <td><%= animal.sex.capitalize %></td>
+    </tr>
+
+    <tr>
+      <td><strong>Age:</strong></td>
+      <td><%= animal.age %></td>
+    </tr>
+    <% if animal.breeds_summary.present? %>
+      <tr>
+        <td><strong>Breed(s):</strong></td>
+        <td><%= animal.breeds_summary %></td>
+      </tr>
+    <% end %>
+
+  </tbody>
+</table>
