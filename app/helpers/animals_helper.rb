@@ -1,3 +1,4 @@
+# rubocop:disable Rails/HelperInstanceVariable
 module AnimalsHelper
   def can_show_adoption_details?
     current_user.present? && @animal.adopted?
@@ -15,3 +16,4 @@ module AnimalsHelper
     @animal.name.capitalize
   end
 end
+# rubocop:enable Rails/HelperInstanceVariable

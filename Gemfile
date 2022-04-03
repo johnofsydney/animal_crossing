@@ -71,4 +71,4 @@ gem 'aws-sdk-s3', '~> 1'
 gem 'bundler-audit'
 gem 'devise', '~> 4.8'
 
-gem "annotate", "~> 3.2"
+gem 'annotate', '~> 3.2'
