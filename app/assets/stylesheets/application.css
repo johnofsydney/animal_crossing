@@ -21,6 +21,22 @@
     /* border: 1px red solid; */
 }
 
+.row {
+  margin-bottom: 1rem;
+}
+
+/* home page */
+.root-hero {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size:cover;
+  background-attachment: fixed;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+
+
 
 .card-img-top {
     width: 100%;
@@ -34,16 +50,6 @@
   margin-bottom: 1vw;
 }
 
-
-.root-hero {
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size:cover;
-  background-attachment: fixed;
-  margin-top: 50px;
-  margin-bottom: 50px;
-}
-
 .card-body {
   overflow:hidden;
   /* min-height: 100%;
@@ -53,4 +59,21 @@
 .card-text {
   height: 50px;
   font-size: small;
+}
+
+/* for carousel on show page */
+.carousel .carousel-item {
+  height: 500px;
+}
+
+.carousel-item img {
+    position: absolute;
+    object-fit:cover;
+    top: 0;
+    left: 0;
+    min-height: 500px;
+}
+
+.carousel-caption {
+  background-color: rgba(1,1,1,0.5);
 }
