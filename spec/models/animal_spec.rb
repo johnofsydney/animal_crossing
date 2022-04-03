@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: animals
+#
+#  id                                     :bigint           not null, primary key
+#  name                                   :string
+#  dob                                    :date
+#  description                            :string
+#  created_at                             :datetime         not null
+#  updated_at                             :datetime         not null
+#  size                                   :string
+#  sex                                    :string
+#  good_with_small_children               :boolean
+#  good_with_older_children               :boolean
+#  good_with_other_dogs                   :boolean
+#  good_with_cats                         :boolean
+#  can_be_left_alone_during_working_hours :boolean
+#  apartment_friendly                     :boolean
+#  adopted_by_name                        :string
+#  adopted_by_email                       :string
+#  adopted_by_phone                       :string
+#  adopted_date                           :date
+#  species                                :string
+#
 require 'rails_helper'
 
 RSpec.describe Animal, type: :model do
