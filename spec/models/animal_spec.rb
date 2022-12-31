@@ -24,7 +24,7 @@
 #
 require 'rails_helper'
 
-RSpec.describe Animal, type: :model do
+RSpec.describe Animal do
   subject(:animal) do
     build(
       :animal,
