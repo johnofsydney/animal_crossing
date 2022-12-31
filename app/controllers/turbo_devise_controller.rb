@@ -1,7 +1,6 @@
 # app/controllers/turbo_devise_controller.rb
 # https://betterprogramming.pub/devise-auth-setup-in-rails-7-44240aaed4be
 
-# rubocop:disable Style/GuardClause
 class TurboDeviseController < ApplicationController
   class Responder < ActionController::Responder
     def to_turbo_stream
@@ -20,4 +19,3 @@ class TurboDeviseController < ApplicationController
   self.responder = Responder
   respond_to :html, :turbo_stream
 end
-# rubocop:enable Style/GuardClause

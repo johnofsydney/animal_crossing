@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AnimalsController, type: :controller do
+RSpec.describe AnimalsController do
   let(:user) { create(:user) }
   let(:animal) { create(:animal) }
 
@@ -95,10 +95,6 @@ RSpec.describe AnimalsController, type: :controller do
       fixture_file_upload('SpongeBob.svg.png', 'image/png')
     end
 
-    xcontext 'when the user is not logged in' do
-      # TODO: add the user is not logged in case
-    end
-
     context 'when the user is logged in' do
       before do
         sign_in user
@@ -135,9 +131,6 @@ RSpec.describe AnimalsController, type: :controller do
 
     let(:mock_s3_client) do
       Aws::S3::Client.new(stub_responses: true)
-    end
-
-    xcontext 'when the user is not logged in' do
     end
 
     context 'when the user is logged in' do

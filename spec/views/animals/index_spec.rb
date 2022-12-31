@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe '/animals/index', type: :view do
+RSpec.describe '/animals/index' do
   let(:animals) { [create(:animal_with_photos)] }
 
   it 'displays title' do
