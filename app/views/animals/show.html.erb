@@ -1,28 +1,28 @@
-<p style="color: green"><%= notice %></p>
+<%= render "photo_carousel", animal: @animal%>
 
-  <% if current_user %> <!-- Logged in users can edit -->
-    <%= link_to("Edit", edit_animal_path) %>
-  <% end %>
-
-  <%= render "photo_carousel", animal: @animal%>
-
-  <div class="row">
-    <div class="col">
-      <p>
-        <%= @animal.description %>
-      </p>
-    </div>
-
-    <div class="col">
-      <%= render "animal_details", animal: @animal%>
-    </div>
+<div class="row">
+  <div class="col-sm-12 col-md-6">
+    <%= render "animal_details", animal: @animal%>
   </div>
 
   <% if can_show_adoption_details? %> <!-- Logged in users can see adoption details -->
-    <%= render "adoption_details", animal: @animal%>
+
+    <div class="col-sm-12 col-md-6">
+      <%= render "adoption_details", animal: @animal%>
+    </div>
+  <% else %>
+    <div class="col-sm-12 col-md-6">
+      <%= render "adoption_call_to_action", animal: @animal%>
+    </div>
   <% end %>
 
-
+  <div class="col">
+    <h4>Summary</h4>
+    <p>
+      <%= @animal.description %>
+    </p>
+  </div>
+</div>
 
 
 <script>

@@ -26,7 +26,7 @@ class AnimalsController < ApplicationController
       PhotosService.new(@animal, params).add_photos
       BreedsService.new(@animal, params).save_breeds
 
-      redirect_to animal_url(@animal), notice: 'Animal was successfully created.'
+      redirect_to animal_url(@animal)
     else
       render :new, status: :unprocessable_entity
     end
@@ -39,7 +39,7 @@ class AnimalsController < ApplicationController
       # TODO: - safe params for nested breed attributes
       PhotosService.new(@animal, params).add_photos
       BreedsService.new(@animal, params).save_breeds
-      redirect_to animal_url(@animal), notice: 'Animal was successfully updated.'
+      redirect_to animal_url(@animal)
     else
       render :edit, status: :unprocessable_entity
     end
@@ -49,7 +49,7 @@ class AnimalsController < ApplicationController
     PhotosService.new(@animal).delete_photos
 
     @animal.destroy
-    redirect_to animals_url, notice: 'Animal was successfully destroyed.'
+    redirect_to animals_url, notice: 'Animal record was successfully deleted.'
   end
 
   def delete_photo
