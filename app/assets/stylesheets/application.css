@@ -84,3 +84,19 @@
 h3.center {
   text-align: center;
 }
+
+.center {
+  margin: auto;
+  display: block;
+}
+
+.w100 {
+  width: 100%;
+}
+
+#animal_show_cta {
+  justify-content: space-around;
+  align-items: center;
+  margin: 0 auto;
+  padding: 10px;
+}

@@ -81,7 +81,8 @@
   <div class="row">
     <% @animal.photos.each do |photo| %>
       <div class="photo">
-        <%= image_tag(photo.address)%>
+        <%= image_tag(photo.address, class: "d-block w-100") %>
+        ,<br>
       </div>
       <%= link_to "Delete Photo", "/animals/#{@animal.id}/delete_photo/#{photo.id}", data: { "turbo-method": :delete } %>
     <% end %>

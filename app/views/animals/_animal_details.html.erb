@@ -20,7 +20,11 @@
     </tr>
     <% if animal.breeds_summary.present? %>
       <tr>
-        <td><strong>Breed(s):</strong></td>
+        <% if animal.breeds.count ==  1 %>
+          <td><strong>Breed:</strong></td>
+        <% else %>
+          <td><strong>Breeds:</strong></td>
+        <% end %>
         <td><%= animal.breeds_summary %></td>
       </tr>
     <% end %>
