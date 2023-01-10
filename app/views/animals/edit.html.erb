@@ -2,13 +2,17 @@
 
 <%= render "form", animal: @animal %>
 
-<div>
-  <%=
-    button_to(
-      "Destroy this animal",
-      @animal,
-      method: :delete,
-      form: { data: { turbo_confirm: "Are you sure you want to delete the record for #{@animal.name}?" } }
-    )
-  %>
-</div>
+<form action="">
+  <div class="d-grid gap-2">
+    <%=
+      button_to(
+        "Delete this animal",
+        @animal,
+        method: :delete,
+        form: { data: { turbo_confirm: "Are you sure you want to delete the record for #{@animal.name}?" } },
+        class: 'btn btn-danger btn-lg btn-block'
+      )
+    %>
+  </div>
+</form>
+
