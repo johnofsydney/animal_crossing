@@ -83,7 +83,7 @@ class Animal < ApplicationRecord
   private
 
   def days_old
-    return @days_old = 99999 unless self.dob.present?
+    return @days_old = 99_999 if self.dob.blank?
 
     @days_old ||= (Time.zone.today - self.dob).to_i
   end
