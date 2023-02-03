@@ -4,6 +4,10 @@ module AnimalsHelper
     current_user.present? && @animal.adopted?
   end
 
+  def can_edit?
+    current_user.present?
+  end
+
   def page_title
     @animal.adopted? ? adopted_message : animal_name
   end
