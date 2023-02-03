@@ -1,3 +1,14 @@
+<% if can_edit? %>
+  <%=
+    link_to(
+      "Edit this animal",
+      edit_animal_path(@animal),
+      method: :get,
+      class: 'btn btn-danger btn-lg btn-block hundred'
+    )
+  %>
+<% end %>
+
 <%= render "photo_carousel", animal: @animal%>
 
 <div class="row">
