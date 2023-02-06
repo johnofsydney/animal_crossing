@@ -18,11 +18,14 @@
 
   <% if can_show_adoption_details? %> <!-- Logged in users can see adoption details -->
 
+
+
+
     <div class="col-sm-12 col-md-6">
       <%= render "adoption_details", animal: @animal%>
     </div>
   <% else %>
-    <div class="col-sm-12 col-md-6">
+    <div class="col-sm-12 col-md-6" id="animal_show_cta">
       <%= render "adoption_call_to_action", animal: @animal%>
     </div>
   <% end %>
@@ -33,6 +36,10 @@
       <%= @animal.description %>
     </p>
   </div>
+
+
+
+
 </div>
 
 

@@ -71,6 +71,7 @@ class Animal < ApplicationRecord
 
   def breeds_summary
     return '' if self.breeds.empty?
+    return breeds.first.breed if breeds.count == 1
 
     self.breeds.map(&:breed).join(' x ')
   end
@@ -82,6 +83,8 @@ class Animal < ApplicationRecord
   private
 
   def days_old
+    return @days_old = 99_999 if self.dob.blank?
+
     @days_old ||= (Time.zone.today - self.dob).to_i
   end
 end
