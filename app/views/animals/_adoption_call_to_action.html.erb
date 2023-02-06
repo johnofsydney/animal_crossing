@@ -1,6 +1,16 @@
+
+<div class="center">
+  <%= button_to "Edit this animal", edit_animal_path(@animal), class: "center btn btn-danger" %>
+
+</div>
+
+<div class="center">
 <h3 class="center"><%= animal.name.capitalize %> is ready to adopt now.</h3>
 <button type="button" class="center btn btn-primary">
   Click here to send us an email
 </button>
+</div>
+
+
 
 <p>Tell us about yourself and let's arrange a time for you to come and meet  <%= animal.name.capitalize %></p>

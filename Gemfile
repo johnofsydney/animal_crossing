@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.0.0'
-gem 'rails', '~> 7.0.4'
+gem 'rails', '>= 7.0.4.1'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'

@@ -11,90 +11,64 @@
     </div>
   <% end %>
 
-  <div class="row">
-    <div class="col">
-      <div class="mb-3">
-        <%= form.label :name, class: "form-label" %>
-        <%= form.text_field :name, class: "form-control" %>
-      </div>
-      <div class="mb-3">
-        <%= form.label :dob, class: "form-label" %>
-        <%= form.date_field :dob, class: "form-control" %>
-      </div>
 
-      <div class="mb-3">
-        <%= form.label :size %>
-        <%= form.select :size, ["small", "medium", "large"], {}, { class: 'form-control' } %>
-      </div>
-      <div class="mb-3">
+<form action="">
+  <div class="form-group">
+    <%= form.label :name, class: "form-label" %>
+    <%= form.text_field :name, class: "form-control" %>
+  </div>
+    <div class="form-group">
         <%= form.label :species %>
         <%= form.select :species, ["dog", "cat", "other"], {}, { class: 'form-control' } %>
-      </div>
-    </div>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :size %>
+    <%= form.select :size, ["small", "medium", "large"], {}, { class: 'form-control' } %>
+  </div>
+  <div class="form-group">
+    <%= form.label :dob, class: "form-label" %>
+    <%= form.date_field :dob, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= form.label :description, class: "form-label" %>
+    <%= form.text_area :description, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= form.label :sex %>
+    <%= form.select :sex, ["male", "female"], {}, { class: 'form-control' } %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :photos %>
+    <%= form.file_field :photos, multiple: true, class: "form-control"%>
+  </div>
 
 
-    <div class="col">
-
-
-      <div class="mb-3">
-        <%= form.label :sex %>
-        <%= form.select :sex, ["male", "female"], {}, { class: 'form-control' } %>
-      </div>
-      <div class="mb-3">
-        <%= form.label :breed_ids, class: "form-label" %>
-        <%= collection_select(
-          # https://stackoverflow.com/questions/8907867/can-someone-explain-collection-select-to-me-in-clear-simple-terms
-
-          :breeds, # field namespace
-          :ids,# field_name
-          # result of these two params will be: <select name="breeds[ids]">...
-
-          # then you should specify some collection or array of rows.
-          # It can be Author.where(..).order(..) or something like that.
-          # In your example it is:
-          Breed.all,
-
-          :id, # this is name of method that will be called for every row, result will be set as key
-          :breed, # this is name of method that will be called for every row, result will be set as value
-          { :selected => animal.breeds.map(&:id), :include_blank => "Please select on or more breeds" }, # hash of options
-          { :multiple => true, class: "form-control" } # html options
-          )%>
-      </div>
-      <div class="col">
-
-      </div>
-
-    </div>
-    <div class="col">
-      <div class="mb-3">
-        <%= form.label :description, class: "form-label" %>
-        <%= form.text_area :description, class: "form-control" %>
-      </div>
-    </div>
+  <div class="d-grid gap-2">
+    <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
   </div>
 
 
 
+</form>
 
-
-
-  <div class="row">
+  <div id="edit-images" class="row">
     <% @animal.photos.each do |photo| %>
       <div class="photo">
-        <%= image_tag(photo.address)%>
+        <%= image_tag(photo.address, class: "d-block w-100") %>
+        ,<br>
       </div>
-      <%= link_to "Delete Photo", "/animals/#{@animal.id}/delete_photo/#{photo.id}", data: { "turbo-method": :delete } %>
+      <%=
+        button_to(
+          "Delete this photo",
+          "/animals/#{@animal.id}/delete_photo/#{photo.id}",
+          method: :delete,
+          data: { "turbo-method": :delete },
+          class: 'btn btn-warning btn-lg btn-block'
+      )
+    %>
+
     <% end %>
-  </div>
-
-  <div class="field">
-    <%= form.label :photos %>
-    <%= form.file_field :photos, multiple: true %>
-  </div>
-
-
-
-  <div>
-    <%= form.submit %>
   </div>
 <% end %>
